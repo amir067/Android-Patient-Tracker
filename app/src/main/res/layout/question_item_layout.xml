@@ -1,0 +1,11 @@
+<Button xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/btn_statement"
+    android:layout_width="match_parent"
+    android:layout_height="49dp"
+    android:layout_margin="10dp"
+    android:background="@drawable/ripple_effect_gradent"
+    android:fontFamily="@font/font26"
+    android:textAlignment="center"
+    android:textColor="@color/common_google_signin_btn_text_light_pressed"
+    android:textSize="18sp" />

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.Authentication.RegisterActivity">
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:onClick="onBackPressed"
+        app:srcCompat="@drawable/ic_arrow_left_black_48dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="624dp"
+
+        android:layout_marginTop="-5dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/monts3"
+            android:text="Register"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="30dp"
+            android:textStyle="normal" />
+
+        <EditText
+            android:id="@+id/r_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/edge_border"
+            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
+            android:hint="Username"
+            android:padding="10dp"
+
+            tools:ignore="DuplicateIds" />
+
+        <EditText
+            android:id="@+id/r_PhoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/edge_border"
+            android:digits="0123456789"
+            android:hint="Phone Number"
+            android:inputType="phone"
+            android:padding="10dp" />
+
+        <EditText
+            android:id="@+id/r_Age"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/edge_border"
+            android:hint="Age"
+            android:inputType="numberSigned"
+            android:padding="10dp"
+
+            tools:ignore="DuplicateIds" />
+
+        <EditText
+            android:id="@+id/r_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/edge_border"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:padding="10dp" />
+
+        <EditText
+            android:id="@+id/r_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/edge_border"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:padding="10dp" />
+
+        <Spinner
+            android:id="@+id/r_gender"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_margin="10dp"
+            android:hint="Enter your gender"
+            android:textColorHint="@color/black_overlay" />
+
+        <Button
+            android:id="@+id/btn_register"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:background="@drawable/rounded_border_buttonorange"
+            android:fontFamily="@font/montebold"
+            android:onClick="onRegisterClick"
+            android:padding="5dp"
+            android:text="Register"
+            android:textColor="@color/amber_50"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/monts3"
+
+        android:gravity="center"
+        android:text="Android Patient Tracker"
+        android:textColor="@color/APTColorA1"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+
+</FrameLayout>

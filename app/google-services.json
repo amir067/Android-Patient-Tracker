@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "755453986608",
+    "project_id": "android-patient-tracker-4ba55",
+    "storage_bucket": "android-patient-tracker-4ba55.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:755453986608:android:27e7356f7b2b58eb5f6af5",
+        "android_client_info": {
+          "package_name": "com.my.AndroidPatientTracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "755453986608-815vash3ohfoprsl29tvuen4e96au0gf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApj_qD1zD0OvClWfPQsFNKddOAhe_jMFQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "755453986608-815vash3ohfoprsl29tvuen4e96au0gf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

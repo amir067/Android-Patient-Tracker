@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_on_boarding_color"
+    android:orientation="vertical"
+    tools:context=".ui.Activities.WalkThrowActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="40dp"
+        android:elevation="10dp"
+        android:fontFamily="@font/arlon_semi_bold"
+        android:text="Android Patient Tracker"
+        android:textAllCaps="false"
+        android:textColor="@color/GradientColor2"
+        android:textSize="30dp"
+        android:textStyle="normal|bold" />
+
+    <LinearLayout
+        android:id="@+id/lay_one"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:clipToPadding="false"
+            android:hapticFeedbackEnabled="true">
+
+        </androidx.viewpager.widget.ViewPager>
+
+        <me.relex.circleindicator.CircleIndicator
+            android:id="@+id/indicator"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_gravity="bottom"
+            android:paddingBottom="15dp"
+            android:weightSum="1"
+            app:ci_drawable="@drawable/ic_brightness_1_black_24dp"
+            app:ci_drawable_unselected="@drawable/ic_brightness_1_grey_24dp"
+            app:ci_height="5dp"
+            app:ci_width="5dp">
+
+        </me.relex.circleindicator.CircleIndicator>
+
+        <Button
+            android:id="@+id/btn_get_start"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/bg_button_gradient_purple"
+            android:fontFamily="@font/monts3"
+            android:gravity="center"
+            android:padding="0dp"
+            android:text="Next"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+
+    </LinearLayout>
+
+</RelativeLayout>

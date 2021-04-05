@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home_fragment"
+        android:icon="@drawable/ic_baseline_filter_list_24"
+        android:title="Home" />
+    <item
+        android:id="@+id/navigation_find_doctor_fragment"
+        android:icon="@drawable/ic_baseline_people_24"
+        android:title="View Patients" />
+
+    <item
+        android:id="@+id/navigation_profile_fragment"
+        android:icon="@drawable/ic_baseline_account_circle_24"
+        android:title="Me" />
+
+</menu>

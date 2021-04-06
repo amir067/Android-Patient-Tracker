@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="110dp"
+    android:layout_height="80dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:foreground="@drawable/ripple_effect_white_bg"
+    app:cardBackgroundColor="#00BCD4"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="5dp"
+    app:cardPreventCornerOverlap="false">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="30dp"
+        app:cardCornerRadius="8dp">
+        <ImageView
+            android:id="@+id/iv_category_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:cropToPadding="false"
+            android:padding="0dp"
+            android:scaleType="fitStart"
+            android:src="@drawable/ic_baseline_bedroom_parent_24" />
+        <TextView
+            android:id="@+id/tv_room_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="50dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/bariol_bold"
+            android:gravity="center"
+            android:padding="3dp"
+            android:text="C4"
+            android:textColor="#00BCD4"
+            android:textSize="24sp" />
+
+
+    </androidx.cardview.widget.CardView>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="50dp"
+        android:padding="2dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_room_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1"
+                android:text="Free"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/tv_room_space_filled"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:drawableLeft="@drawable/ic_baseline_supervisor_account_14"
+                android:drawablePadding="5dp"
+                android:text="12"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
+    </FrameLayout>
+
+</androidx.cardview.widget.CardView>

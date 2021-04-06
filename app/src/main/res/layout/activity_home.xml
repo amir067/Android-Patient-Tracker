@@ -195,7 +195,7 @@
                         android:orientation="horizontal"
                         tools:itemCount="10"
                         tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                        tools:listitem="@layout/item_view_category">
+                        tools:listitem="@layout/item_view_room">
 
                     </androidx.recyclerview.widget.RecyclerView>
 

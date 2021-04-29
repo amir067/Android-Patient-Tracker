@@ -127,12 +127,6 @@
                         android:textColor="#FFFFFF"
                         android:textSize="20dp" />
 
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -147,8 +141,7 @@
                     <TextView
                         android:id="@+id/tv_p_age"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
                         android:fontFamily="@font/bariol_bold"
                         android:gravity="left"
                         android:padding="3dp"
@@ -156,6 +149,12 @@
                         android:text="26"
                         android:textColor="#FFFFFF"
                         android:textSize="20dp" />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
                     <TextView
                         android:id="@+id/tv_p_age3"

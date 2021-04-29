@@ -82,9 +82,9 @@ public class PatientsListAdapter extends RecyclerView.Adapter<PatientsListAdapte
         TextView patientGenderTV = holder.patientGenderTV;
         TextView patientRoomTV = holder.patientRoomTV;
 
-        patientIDTV.setText(patientsList.get(position).getID());
+        patientIDTV.setText(patientsList.get(position).getId());
         patientNameTV.setText(patientsList.get(position).getName());
-        patientAgeTV.setText(""+patientsList.get(position).getAge());
+        patientAgeTV.setText(""+patientsList.get(position).getAge().intValue());
         patientGenderTV.setText(patientsList.get(position).getGender());
         patientRoomTV.setText(patientsList.get(position).getRoomID());
 

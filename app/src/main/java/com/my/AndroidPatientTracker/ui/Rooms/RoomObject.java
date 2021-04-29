@@ -2,7 +2,7 @@ package com.my.AndroidPatientTracker.ui.Rooms;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
-//@IgnoreExtraProperties
+@IgnoreExtraProperties
 public  class RoomObject {
 
 	private String id;
@@ -42,4 +42,35 @@ public  class RoomObject {
 		return space_filled;
 	}
 
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public Double getSpace_total() {
+		return space_total;
+	}
+
+	public void setSpace_total(Double space_total) {
+		this.space_total = space_total;
+	}
+
+	public void setSpace_filled(Double space_filled) {
+		this.space_filled = space_filled;
+	}
+
+	public long getAdded_at() {
+		return added_at;
+	}
+
+	public void setAdded_at(long added_at) {
+		this.added_at = added_at;
+	}
+
+	public long getModified_at() {
+		return modified_at;
+	}
+
+	public void setModified_at(long modified_at) {
+		this.modified_at = modified_at;
+	}
 }

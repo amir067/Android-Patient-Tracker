@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.my.AndroidPatientTracker.Interface.RecyclerviewOnClickListener;
 import com.my.AndroidPatientTracker.R;
+import com.my.AndroidPatientTracker.ui.Rooms.RoomObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,7 @@ public class PatientsListAdapterV2 extends RecyclerView.Adapter<PatientsListAdap
         View view = LayoutInflater.from(context).inflate(R.layout.item_view_patients_full,parent,false);
         return new MyviewHolder(view);
     }
-    public static class MyviewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class MyviewHolder extends RecyclerView.ViewHolder implements View.OnClickListener ,View.OnLongClickListener{
 
         public TextView patientIDTV;
         public TextView patientNameTV;
@@ -54,7 +55,7 @@ public class PatientsListAdapterV2 extends RecyclerView.Adapter<PatientsListAdap
 
 
             itemView.setOnClickListener(this);
-
+            itemView.setOnLongClickListener(this);
         }
 
         @Override
@@ -62,6 +63,11 @@ public class PatientsListAdapterV2 extends RecyclerView.Adapter<PatientsListAdap
             onClickListner.onItemClick(getAdapterPosition(), v);
         }
 
+        @Override
+        public boolean onLongClick(View v) {
+            onClickListner.onItemLongClick(getAdapterPosition(), v);
+            return true;
+        }
     }
     public void setOnItemClickListener(OnClickListner onclicklistner) {
         PatientsListAdapterV2.onClickListner = onclicklistner;
@@ -81,11 +87,11 @@ public class PatientsListAdapterV2 extends RecyclerView.Adapter<PatientsListAdap
         TextView patientGenderTV = holder.patientGenderTV;
         TextView patientRoomTV = holder.patientRoomTV;
 
-        patientIDTV.setText(patientsList.get(position).getID());
+        patientIDTV.setText(patientsList.get(position).getId());
         patientNameTV.setText(patientsList.get(position).getName());
-        patientAgeTV.setText(""+patientsList.get(position).getAge());
+        patientAgeTV.setText(""+patientsList.get(position).getAge().intValue());
         patientGenderTV.setText(patientsList.get(position).getGender());
-        patientRoomTV.setText(patientsList.get(position).getRoomID());
+        patientRoomTV.setText(patientsList.get(position).getRoomName());
 
         //Picasso.get().load(placeObjects.get(position).getImageURL()).into(placeImageURLIV);
 
@@ -93,6 +99,14 @@ public class PatientsListAdapterV2 extends RecyclerView.Adapter<PatientsListAdap
             @Override
             public void onClick(View v) {
                 listener.recyclerviewClick(position);
+            }
+        });
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                listener.onItemLongClick(position,v);
+                return  true;
             }
         });
 
@@ -137,6 +151,11 @@ public class PatientsListAdapterV2 extends RecyclerView.Adapter<PatientsListAdap
             return patientsList.size();
         }
         return 0;
+    }
+
+    public PatientObject getItem(int index) {
+       // Log.i(TAG,"returning place from adapter :"+String.valueOf(roomsList.get(index).getName()));
+        return patientsList.get(index);
     }
 
 

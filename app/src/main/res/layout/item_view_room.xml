@@ -39,6 +39,7 @@
             android:fontFamily="@font/bariol_bold"
             android:gravity="center"
             android:padding="3dp"
+            android:singleLine="true"
             android:text="C4"
             android:textColor="#00BCD4"
             android:textSize="20dp" />

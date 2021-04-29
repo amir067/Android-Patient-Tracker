@@ -110,6 +110,8 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
 
     RecyclerviewOnClickListener recyclerviewOnClickListener ;
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
@@ -149,6 +151,27 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
         roomsRV= view.findViewById(R.id.rv_rooms);
         patientsRV= view.findViewById(R.id.rv_patients);
         progressbar= view.findViewById(R.id.pb_home_frag);
+
+        barButton1 = view.findViewById(R.id.btn_bar_btn1);
+        barButton2 = view.findViewById(R.id.btn_bar_btn2);
+        barButton3 = view.findViewById(R.id.btn_bar_btn3);
+        barButton4 = view.findViewById(R.id.btn_bar_btn4);
+
+        barButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.navigate(R.id.action_navigation_home_fragment_to_patientsFragment);
+            }
+        });
+
+        barButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.navigate(R.id.action_navigation_home_fragment_to_roomsFragment);
+            }
+        });
+
+
 
         //profile();
 
@@ -250,8 +273,6 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
             public void recyclerviewClick(int position) {
                 Log.e(TAG, "recyclerviewClick: patient clicked" );
                 Bundle placeId = new Bundle();
-                placeId.putInt("patientId",Integer.parseInt(roomsList.get(position).getId()));
-                placeId.putString("patientName",(roomsList.get(position).getName()));
                 // navController.navigate(R.id.action_navigation_home_fragment_to_placeDetailFragment,placeId);
             }
 

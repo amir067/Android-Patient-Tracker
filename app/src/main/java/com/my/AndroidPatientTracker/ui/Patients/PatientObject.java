@@ -12,19 +12,12 @@ public  class PatientObject implements Serializable {
 	private String Name;
 	private String Gender;
 	private String RoomID;
+	private String RoomName;
 
 	private Double Age;
 
 	public PatientObject() {
 		// Default constructor required for calls to DataSnapshot.getValue(User.class)
-	}
-
-	public String getID() {
-		return Id;
-	}
-
-	public void setID(String ID) {
-		this.Id = ID;
 	}
 
 	public String getName() {
@@ -57,5 +50,21 @@ public  class PatientObject implements Serializable {
 
 	public void setRoomID(String roomID) {
 		RoomID = roomID;
+	}
+
+	public String getId() {
+		return Id;
+	}
+
+	public void setId(String id) {
+		Id = id;
+	}
+
+	public String getRoomName() {
+		return RoomName;
+	}
+
+	public void setRoomName(String roomName) {
+		RoomName = roomName;
 	}
 }

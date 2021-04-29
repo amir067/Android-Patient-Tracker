@@ -84,7 +84,7 @@
                                         app:icon="@drawable/ic_baseline_people_24"
                                         app:iconGravity="textTop"
                                         app:iconSize="25dp"
-                                        app:rippleColor="@color/blue_500" />
+                                        app:rippleColor="@color/purple_A400" />
 
                                     <com.google.android.material.button.MaterialButton
                                         android:id="@+id/btn_bar_btn2"
@@ -99,7 +99,7 @@
                                         app:icon="@drawable/ic_baseline_bedroom_parent__white24"
                                         app:iconGravity="textTop"
                                         app:iconSize="30dp"
-                                        app:rippleColor="@color/blue_500" />
+                                        app:rippleColor="@color/amber_800" />
 
                                     <com.google.android.material.button.MaterialButton
                                         android:id="@+id/btn_bar_btn3"
@@ -234,8 +234,10 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="15dp"
+                                android:layout_weight="1"
                                 android:layout_marginLeft="15dp"
                                 android:layout_marginTop="10dp"
+                                android:nestedScrollingEnabled="false"
                                 android:background="@android:color/transparent"
                                 android:orientation="horizontal"
                                 tools:itemCount="5"

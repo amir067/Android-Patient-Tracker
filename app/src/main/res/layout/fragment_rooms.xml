@@ -37,25 +37,26 @@ tools:context=".ui.Rooms.RoomsFragment">
         android:textColor="@color/white"
         android:textSize="16dp" />
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="90dp"
-    android:orientation="vertical">
-
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_patients"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@android:color/transparent"
-        tools:itemCount="10"
-        tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        tools:listitem="@layout/item_view_patients_full"
-        tools:orientation="vertical" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="90dp"
+        android:orientation="vertical">
 
-</LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_rooms"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+
+            tools:itemCount="10"
+            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            tools:listitem="@layout/item_view_room"
+            tools:orientation="vertical" />
+
+    </LinearLayout>
 
 <androidx.cardview.widget.CardView
     android:layout_width="match_parent"
@@ -70,7 +71,7 @@ tools:context=".ui.Rooms.RoomsFragment">
     app:cardElevation="5dp">
 
     <com.mancj.materialsearchbar.MaterialSearchBar
-        android:id="@+id/sb_patients"
+        android:id="@+id/sb_rooms"
         style="@style/MaterialSearchBarLight"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -81,7 +82,7 @@ tools:context=".ui.Rooms.RoomsFragment">
         android:clipToPadding="false"
         android:padding="0dp"
         app:mt_borderlessRippleEnabled="true"
-        app:mt_hint="Search Places,events"
+        app:mt_hint="Search Rooms"
         app:mt_maxSuggestionsCount="10"
         app:mt_placeholder="Search Rooms"
         app:mt_searchBarColor="@color/white"
@@ -104,7 +105,7 @@ tools:context=".ui.Rooms.RoomsFragment">
     app:srcCompat="@drawable/ic_baseline_add_24" />
 
 <ProgressBar
-    android:id="@+id/pb_patients_frag"
+    android:id="@+id/pb_rooms_frag"
     style="?android:attr/progressBarStyle"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"

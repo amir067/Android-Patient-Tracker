@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,9 +25,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.my.AndroidPatientTracker.Interface.RecyclerviewOnClickListener;
 import com.my.AndroidPatientTracker.R;
-import com.my.AndroidPatientTracker.adapters.SearchBarAdapter;
-import com.my.AndroidPatientTracker.ui.Patients.PatientObject;
-import com.my.AndroidPatientTracker.ui.Patients.PatientsListAdapter;
+import com.my.AndroidPatientTracker.adapters.SearchBarAdapterPatient;
+import com.my.AndroidPatientTracker.adapters.SearchBarAdapterRoom;
 import com.my.AndroidPatientTracker.utils.MyUtils;
 import com.my.AndroidPatientTracker.utils.Tools;
 
@@ -43,24 +43,25 @@ public class RoomsFragment extends Fragment implements RecyclerviewOnClickListen
     protected ProgressBar progressbar;
 
 
-    //Patients
-    private RecyclerView patientsRV;
-    protected List<PatientObject> patientsList = new ArrayList<>();
-    protected PatientsListAdapter patientsListAdapter ;
+    //Rooms
+    private RecyclerView roomsRV;
+    protected List<RoomObject> roomsList = new ArrayList<>();
+    protected RoomsListAdapter roomsListAdapter ;
+    private RoomsSuggestionsAdapter roomsSuggestionsAdapter;
 
 
     // Serach bar
     private MaterialSearchBar searchBar;
-    private SearchBarAdapter searchBarAdapter;
+    private SearchBarAdapterRoom searchBarAdapterRoom;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_patients, container, false);
+        View root = inflater.inflate(R.layout.fragment_rooms, container, false);
         getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         Tools.setSystemBarTransparent(requireActivity());
 
-        searchBarAdapter = new SearchBarAdapter(inflater,this);
+        searchBarAdapterRoom = new SearchBarAdapterRoom(inflater,this);
 
         // Inflate the layout for this fragment
         return root;
@@ -70,29 +71,43 @@ public class RoomsFragment extends Fragment implements RecyclerviewOnClickListen
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
         MyUtils.hideKeyboard(requireActivity());
-        progressbar= view.findViewById(R.id.pb_patients_frag);
-        patientsRV= view.findViewById(R.id.rv_patients);
-        searchBar = (MaterialSearchBar) view.findViewById(R.id.sb_patients);
+        progressbar= view.findViewById(R.id.pb_rooms_frag);
+        roomsRV= view.findViewById(R.id.rv_rooms);
+        searchBar = (MaterialSearchBar) view.findViewById(R.id.sb_rooms);
         searchBar.setHint("Search Patients");
         searchBar.setPlaceHolder("Search Patients");
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, true);
-        layoutManager.setReverseLayout(true);
-        layoutManager.setStackFromEnd(true);
+        //LinearLayoutManager layoutManager = new GridLayoutManager(requireContext(), 3,LinearLayoutManager.VERTICAL, false);
+       // layoutManager.setReverseLayout(true);
+//        layoutManager.setStackFromEnd(true);
 
-        patientsRV.setHasFixedSize(true);
-        patientsRV.setLayoutManager(layoutManager);
-        patientsRV.setAdapter(patientsListAdapter);
+        GridLayoutManager layoutManagerGrid=new GridLayoutManager(requireContext(),3);
+
+        roomsRV.setHasFixedSize(true);
+        roomsRV.setLayoutManager(layoutManagerGrid);
+        roomsRV.setAdapter(roomsListAdapter);
 
 
-        loadPatientsList();
+        roomsListAdapter = new RoomsListAdapter(requireContext(),roomsList, new RecyclerviewOnClickListener() {
+            @Override
+            public void recyclerviewClick(int position) {
+                Log.e(TAG, "recyclerviewClick: room clicked" );
+                Bundle placeId = new Bundle();
+                placeId.putInt("roomId",Integer.parseInt(roomsList.get(position).getId()));
+                placeId.putString("roomName",(roomsList.get(position).getName()));
+                // navController.navigate(R.id.action_navigation_home_fragment_to_placeDetailFragment,placeId);
+            }
+        });
+
+
+        loadRoomsList();
     }
 
 
-    private void loadPatientsList() {
+    private void loadRoomsList() {
         // loading_dialog.show();
 
-        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference("patients");
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference("rooms");
         rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -104,16 +119,19 @@ public class RoomsFragment extends Fragment implements RecyclerviewOnClickListen
 
                     for (DataSnapshot data :  snapshot.getChildren())
                     {
-                        PatientObject temObject = data.getValue(PatientObject.class);
-                        patientsList.add(temObject);
+                        RoomObject temRoomObject = data.getValue(RoomObject.class);
+                        roomsList.add(temRoomObject);
                     }
 
-                    patientsListAdapter.setPlaceObjects(patientsList);
-                    searchBarAdapter.setSuggestions(patientsList);
-                    searchBar.setCustomSuggestionAdapter(searchBarAdapter);
+                    roomsListAdapter.setPlaceObjects(roomsList);
+                    roomsRV.setAdapter(roomsListAdapter);
+
+                    searchBarAdapterRoom.setSuggestions(roomsList);
+                    searchBar.setCustomSuggestionAdapter(searchBarAdapterRoom);
                     //placesSuggestionsAdapter.setSuggestions(placeList);
                     //searchBar.setCustomSuggestionAdapter(placesSuggestionsAdapter);
 
+                    progressbar.setVisibility(View.GONE);
                     //  Toast.makeText(requireContext(), " load data success", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "patients value : "+snapshot.getValue());
                     Log.e(TAG, "load data success: patients List " );

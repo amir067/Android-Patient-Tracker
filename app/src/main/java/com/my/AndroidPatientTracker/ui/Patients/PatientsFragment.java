@@ -24,7 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.my.AndroidPatientTracker.Interface.RecyclerviewOnClickListener;
 import com.my.AndroidPatientTracker.R;
-import com.my.AndroidPatientTracker.adapters.SearchBarAdapter;
+import com.my.AndroidPatientTracker.adapters.SearchBarAdapterPatient;
 import com.my.AndroidPatientTracker.ui.Rooms.RoomObject;
 import com.my.AndroidPatientTracker.utils.MyUtils;
 import com.my.AndroidPatientTracker.utils.Tools;
@@ -50,7 +50,7 @@ public class PatientsFragment extends Fragment implements RecyclerviewOnClickLis
 
     // Serach bar
     private MaterialSearchBar searchBar;
-    private SearchBarAdapter searchBarAdapter;
+    private SearchBarAdapterPatient searchBarAdapterPatient;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,7 +59,7 @@ public class PatientsFragment extends Fragment implements RecyclerviewOnClickLis
         getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         Tools.setSystemBarTransparent(requireActivity());
 
-        searchBarAdapter = new SearchBarAdapter(inflater,this);
+        searchBarAdapterPatient = new SearchBarAdapterPatient(inflater,this);
 
         // Inflate the layout for this fragment
         return root;
@@ -124,8 +124,8 @@ public class PatientsFragment extends Fragment implements RecyclerviewOnClickLis
                     }
 
                     patientsListAdapter.setPlaceObjects(patientsList);
-                    searchBarAdapter.setSuggestions(patientsList);
-                    searchBar.setCustomSuggestionAdapter(searchBarAdapter);
+                    searchBarAdapterPatient.setSuggestions(patientsList);
+                    searchBar.setCustomSuggestionAdapter(searchBarAdapterPatient);
                     //placesSuggestionsAdapter.setSuggestions(placeList);
                     //searchBar.setCustomSuggestionAdapter(placesSuggestionsAdapter);
 

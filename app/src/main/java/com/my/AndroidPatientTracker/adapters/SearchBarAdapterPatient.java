@@ -19,11 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class SearchBarAdapter extends SuggestionsAdapter<PatientObject, SearchBarAdapter.SuggestionHolder> {
+public class SearchBarAdapterPatient extends SuggestionsAdapter<PatientObject, SearchBarAdapterPatient.SuggestionHolder> {
 
     private RecyclerviewOnClickListener listener1;
 
-    public SearchBarAdapter(LayoutInflater inflater, RecyclerviewOnClickListener Listener) {
+    public SearchBarAdapterPatient(LayoutInflater inflater, RecyclerviewOnClickListener Listener) {
         super(inflater);
         this.listener1=Listener;
     }

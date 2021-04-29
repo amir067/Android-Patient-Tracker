@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -31,6 +32,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import es.dmoral.toasty.Toasty;
 
 import static com.my.AndroidPatientTracker.utils.MyUtils.isValidEmail;
 
@@ -146,6 +148,8 @@ public class RegisterActivity extends AppCompatActivity {
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
 
             if (task.isSuccessful()) {
+                loading_dialog.hide();
+                Toasty.success(RegisterActivity.this,"Sign Up Success. Please wait..",Toasty.LENGTH_SHORT).show();
 
                // loading.setVisibility(View.GONE);
 
@@ -153,34 +157,35 @@ public class RegisterActivity extends AppCompatActivity {
 
                 String userid = firebaseUser.getUid();
 
-                DocumentReference blogRef = blogsRef.document(userid);
+                 DatabaseReference  reference = FirebaseDatabase.getInstance().getReference("Users").child(userid);
 
                 Map<String, Object> register_user = new HashMap<>();
                 register_user.put("id", userid);
                 register_user.put("email", email);
                 register_user.put("password", password);
-                register_user.put("username", username);
+                register_user.put("name", username);
                 register_user.put("phone", phone);
                 register_user.put("age", age);
                 register_user.put("gender", gender);
-                register_user.put("created_at", new Date());
-                register_user.put("updated_at", new Date());
+                register_user.put("created_at", new Date().getTime());
+                register_user.put("updated_at", new Date().getTime());
                 register_user.put("imageURL", "default");
 
-                blogRef.set(register_user).addOnSuccessListener(aVoid -> {
-                    loading_dialog.show();
+                reference.setValue(register_user).addOnSuccessListener(aVoid -> {
+                    loading_dialog.dismiss();
                     startActivity(new Intent(RegisterActivity.this, HomeActivity.class));
                     finish();
 
                 }).addOnFailureListener(e -> {
-                   // loading.setVisibility(View.INVISIBLE);
+                    Toasty.warning(RegisterActivity.this,"Profile update failed!",Toasty.LENGTH_SHORT).show();
+                    // loading.setVisibility(View.INVISIBLE);
                     Log.e(TAG, "onFailure: " + e.getLocalizedMessage());
                     loading_dialog.dismiss();
                 });
 
             } else {
-                Log.d(TAG, "onComplete: " + task.getException().toString());
-                Toast.makeText(RegisterActivity.this, "You Can't register with this email /E-mail already register", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "onComplete: " + task.getException().getMessage().toString());
+                Toasty.error(RegisterActivity.this, "You Can't register with this email /E-mail already register", Toast.LENGTH_SHORT).show();
                // loading.setVisibility(View.INVISIBLE);
                 loading_dialog.dismiss();
             }

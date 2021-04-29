@@ -43,7 +43,7 @@ import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 import com.my.AndroidPatientTracker.Interface.RecyclerviewOnClickListener;
 import com.my.AndroidPatientTracker.R;
-import com.my.AndroidPatientTracker.adapters.SearchBarAdapter;
+import com.my.AndroidPatientTracker.adapters.SearchBarAdapterPatient;
 import com.my.AndroidPatientTracker.models.UserModel;
 import com.my.AndroidPatientTracker.ui.Patients.PatientObject;
 import com.my.AndroidPatientTracker.ui.Patients.PatientsListAdapter;
@@ -92,7 +92,7 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
 
     // Serach bar
     private MaterialSearchBar searchBar;
-    private SearchBarAdapter searchBarAdapter;
+    private SearchBarAdapterPatient searchBarAdapterPatient;
 
     // DB
     private DatabaseReference reference;
@@ -119,7 +119,7 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
         bottomNavigationView.setVisibility(View.VISIBLE);
 
 
-        searchBarAdapter = new SearchBarAdapter(inflater,this);
+        searchBarAdapterPatient = new SearchBarAdapterPatient(inflater,this);
         // Inflate the layout for this fragment
         return root;
 
@@ -165,7 +165,7 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 Log.d("LOG_TAG", getClass().getSimpleName() + " text changed " + searchBar.getText());
                 // send the entered text to our filter and let it manage everything
-                searchBarAdapter.getFilter().filter(searchBar.getText());
+                searchBarAdapterPatient.getFilter().filter(searchBar.getText());
 
             }
             @Override
@@ -357,8 +357,8 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
                     }
 
                     patientsListAdapter.setPlaceObjects(patientsList);
-                    searchBarAdapter.setSuggestions(patientsList);
-                    searchBar.setCustomSuggestionAdapter(searchBarAdapter);
+                    searchBarAdapterPatient.setSuggestions(patientsList);
+                    searchBar.setCustomSuggestionAdapter(searchBarAdapterPatient);
                     //placesSuggestionsAdapter.setSuggestions(placeList);
                     //searchBar.setCustomSuggestionAdapter(placesSuggestionsAdapter);
 
@@ -394,7 +394,7 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
     @Override
     public void recyclerviewClick(int position) {
 
-        Log.e(TAG, "recyclerviewClick: position: "+searchBarAdapter.getItemId(position) );
+        Log.e(TAG, "recyclerviewClick: position: "+ searchBarAdapterPatient.getItemId(position) );
 
         //searchBar.setPlaceHolder(townObjectList.get(position).getTownName());
         searchBar.closeSearch();
@@ -483,11 +483,11 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
                                 user_name.setText("Welcome, " + userModel.getName());
                                 Log.i(TAG, "parsing-getName: " + userModel.getName());
                             }
-                            if (!userModel.getAddress().isEmpty()) {
+                            if (userModel.getAddress() != null) {
                                 user_address.setText(userModel.getAddress());
                                 Log.i(TAG, "parsing-getAddress: " + userModel.getAddress());
                             }else{
-                                user_address.setText("");
+                                user_address.setVisibility(View.GONE);
                             }
 
 

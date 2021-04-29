@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+style="@style/PatientsFragment"
+android:layout_height="match_parent"
+android:orientation="vertical"
+android:focusableInTouchMode="true"
+tools:context=".ui.Patients.PatientsFragment">
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="160dp"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/bg_abstartct2" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginTop="90dp"
+        android:background="@drawable/bg_box_shader_liner_white"
+        android:orientation="horizontal">
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/helveticaneue_medium"
+        android:gravity="center"
+        android:text="All Patients"
+        android:textColor="@color/white"
+        android:textSize="16dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="90dp"
+        android:orientation="vertical">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_patients"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            tools:itemCount="10"
+            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            tools:listitem="@layout/item_view_patients_full"
+            tools:orientation="vertical" />
+
+    </LinearLayout>
+
+<androidx.cardview.widget.CardView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginTop="45dp"
+    android:layout_marginEnd="15dp"
+    android:layout_marginRight="15dp"
+    app:cardBackgroundColor="#ffff"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="5dp">
+
+    <com.mancj.materialsearchbar.MaterialSearchBar
+        android:id="@+id/sb_patients"
+        style="@style/MaterialSearchBarLight"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="2dp"
+        android:autofillHints="@string/app_name"
+        android:background="@color/white"
+        android:clipToPadding="false"
+        android:padding="0dp"
+        app:mt_borderlessRippleEnabled="true"
+        app:mt_hint="Search Places,events"
+        app:mt_maxSuggestionsCount="10"
+        app:mt_placeholder="Search Patients"
+        app:mt_searchBarColor="@color/white"
+        app:mt_searchIconDrawable="@drawable/ic_baseline_search_24"
+        app:mt_speechMode="false"
+        app:mt_textCursorTint="#4CAF50" />
+
+</androidx.cardview.widget.CardView>
+
+<com.google.android.material.floatingactionbutton.FloatingActionButton
+    android:id="@+id/fab_add_place"
+    style="@style/Widget.Design.FloatingActionButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom|right"
+    android:layout_margin="@dimen/fab_margin"
+    android:clickable="true"
+    android:visibility="gone"
+    app:backgroundTint="#FFEB3B"
+    app:srcCompat="@drawable/ic_baseline_add_24" />
+
+<ProgressBar
+    android:id="@+id/pb_patients_frag"
+    style="?android:attr/progressBarStyle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center" />
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

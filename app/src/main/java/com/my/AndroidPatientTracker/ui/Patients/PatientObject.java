@@ -2,8 +2,11 @@ package com.my.AndroidPatientTracker.ui.Patients;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.io.Serializable;
+
 @IgnoreExtraProperties
-public  class PatientObject {
+
+public  class PatientObject implements Serializable {
 
 	private String Id;
 	private String Name;

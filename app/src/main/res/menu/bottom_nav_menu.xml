@@ -6,9 +6,13 @@
         android:icon="@drawable/ic_baseline_filter_list_24"
         android:title="Home" />
     <item
-        android:id="@+id/navigation_find_doctor_fragment"
+        android:id="@+id/navigation_view_patients_fragment"
         android:icon="@drawable/ic_baseline_people_24"
-        android:title="View Patients" />
+        android:title="Patients" />
+    <item
+        android:id="@+id/navigation_room_fragment"
+        android:icon="@drawable/ic_baseline_bedroom_parent_24"
+        android:title="Rooms" />
 
     <item
         android:id="@+id/navigation_profile_fragment"

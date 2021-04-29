@@ -9,14 +9,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -24,17 +27,24 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 import com.my.AndroidPatientTracker.Interface.RecyclerviewOnClickListener;
 import com.my.AndroidPatientTracker.R;
+import com.my.AndroidPatientTracker.adapters.SearchBarAdapter;
+import com.my.AndroidPatientTracker.models.UserModel;
 import com.my.AndroidPatientTracker.ui.Patients.PatientObject;
 import com.my.AndroidPatientTracker.ui.Patients.PatientsListAdapter;
 import com.my.AndroidPatientTracker.ui.Rooms.RoomsSuggestionsAdapter;
@@ -82,13 +92,21 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
 
     // Serach bar
     private MaterialSearchBar searchBar;
+    private SearchBarAdapter searchBarAdapter;
 
     // DB
     private DatabaseReference reference;
+    //Firebase
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     // user
     private TextView user_name;
+    private TextView user_address;
     private String usr_name,imageURL;
+    private ImageView userImageIV;
+    private CardView userDpCV;
+    private String userProfileUrl;
+    private LinearLayout userProfileInfoBoxLL;
 
     RecyclerviewOnClickListener recyclerviewOnClickListener ;
 
@@ -100,7 +118,8 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
         bottomNavigationView = ((HomeActivity) getActivity()).findViewById(R.id.bottom_nav_view);
         bottomNavigationView.setVisibility(View.VISIBLE);
 
-        //placesSuggestionsAdapter = new RoomsSuggestionsAdapter(inflater,this);
+
+        searchBarAdapter = new SearchBarAdapter(inflater,this);
         // Inflate the layout for this fragment
         return root;
 
@@ -114,19 +133,24 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
         navController = Navigation.findNavController(view);
 
         user_name = view.findViewById(R.id.tv_logged_user_name);
+        user_address = view.findViewById(R.id.tv_logged_user_address);
+        userImageIV = view.findViewById(R.id.iv_user_dp);
+        userDpCV = view.findViewById(R.id.cv_user_dp);
+        userProfileInfoBoxLL = view.findViewById(R.id.ll_user_info_box);
         mainDataFrameLayout = view.findViewById(R.id.main_data_farme_layout);
         noInternetIV = view.findViewById(R.id.iv_no_connection);
         swipeRefreshLayout = view.findViewById(R.id.swipe_layout);
 
         searchBar = (MaterialSearchBar) view.findViewById(R.id.sb_places);
-        searchBar.setHint("Search Places");
+        searchBar.setHint("Search Patients");
+        searchBar.setPlaceHolder("Search Patients");
         //searchBar.setSpeechMode(true);
 
         roomsRV= view.findViewById(R.id.rv_rooms);
         patientsRV= view.findViewById(R.id.rv_patients);
         progressbar= view.findViewById(R.id.pb_home_frag);
 
-
+        //profile();
 
         Tools.clearSystemBarLight(requireActivity());
         Tools.setSystemBarTransparent(requireActivity());
@@ -141,7 +165,7 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 Log.d("LOG_TAG", getClass().getSimpleName() + " text changed " + searchBar.getText());
                 // send the entered text to our filter and let it manage everything
-        //        placesSuggestionsAdapter.getFilter().filter(searchBar.getText());
+                searchBarAdapter.getFilter().filter(searchBar.getText());
 
             }
             @Override
@@ -229,7 +253,6 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
 
 
 
-
         //LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext());
         //LinearLayoutManager liniearLayoutManager = ((LinearLayoutManager)roomsRV.getLayoutManager());
         //placesRV.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, true));
@@ -249,6 +272,7 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
 
         loadRoomsList();
         loadPatientsList();
+        getUserData();
 
         if(navController!=null){
             // navController.navigate();
@@ -333,7 +357,8 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
                     }
 
                     patientsListAdapter.setPlaceObjects(patientsList);
-
+                    searchBarAdapter.setSuggestions(patientsList);
+                    searchBar.setCustomSuggestionAdapter(searchBarAdapter);
                     //placesSuggestionsAdapter.setSuggestions(placeList);
                     //searchBar.setCustomSuggestionAdapter(placesSuggestionsAdapter);
 
@@ -369,7 +394,7 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
     @Override
     public void recyclerviewClick(int position) {
 
-        Log.e(TAG, "recyclerviewClick: position: "+roomsSuggestionsAdapter.getPlacesList().get(position).getName() );
+        Log.e(TAG, "recyclerviewClick: position: "+searchBarAdapter.getItemId(position) );
 
         //searchBar.setPlaceHolder(townObjectList.get(position).getTownName());
         searchBar.closeSearch();
@@ -390,6 +415,146 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         Tools.setSystemBarTransparent(getActivity());
+    }
+
+
+    private void profile() {
+        DocumentReference docRef = db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        docRef.get().addOnSuccessListener(documentSnapshot -> {
+            if (!documentSnapshot.exists()) {
+                Log.d(TAG, "onSuccess: LIST EMPTY");
+                return;
+            }
+            UserModel types = documentSnapshot.toObject(UserModel.class);
+            String gender = types.getGender();
+            usr_name= types.getName();
+            user_name.setText("Hi, "+usr_name);
+            imageURL = types.getProfileImageUrl();
+
+            Glide.with(requireContext())
+                    .load(imageURL)
+                    .placeholder(R.drawable.picture_placeholder)
+                    .diskCacheStrategy(DiskCacheStrategy.DATA)
+                    .error(R.drawable.ic_doctor_mask)
+                    .into(userImageIV);
+
+            userDpCV.setAlpha(0f);
+            userDpCV.setVisibility(View.VISIBLE);
+            AlphaAnimation dp_alphaAnimation = new AlphaAnimation(0.0f, 1.0f);
+            dp_alphaAnimation.setDuration(2500);
+            userDpCV.startAnimation(dp_alphaAnimation);
+
+            preferenceHelperDemo.setKey("gender", gender);
+
+        }).addOnFailureListener(e -> {
+            Log.e(TAG, "onFailure: " + e.getLocalizedMessage());
+            Toast.makeText(requireContext(), "error", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+
+    private void getUserData() {
+
+        //loadingAnimationViewDots.setVisibility(View.VISIBLE);
+        //loading_dialog.show();
+        //progressBar.setVisibility(View.VISIBLE);
+
+
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+
+        if(firebaseUser ==null){
+            Log.e(TAG, "getUserData: firebase user null, try sign in again" );
+
+        }else{
+
+            String userid = firebaseUser.getUid();
+            Log.e(TAG, "userid: "+userid);
+            DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference("Users");
+            rootRef.child(userid).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+
+                        try {
+
+                            UserModel userModel = snapshot.getValue(UserModel.class);
+                            if (!userModel.getName().isEmpty()) {
+
+                                user_name.setText("Welcome, " + userModel.getName());
+                                Log.i(TAG, "parsing-getName: " + userModel.getName());
+                            }
+                            if (!userModel.getAddress().isEmpty()) {
+                                user_address.setText(userModel.getAddress());
+                                Log.i(TAG, "parsing-getAddress: " + userModel.getAddress());
+                            }else{
+                                user_address.setText("");
+                            }
+
+
+                            if (userModel.getProfileUrl() != null) {
+
+                                //userDpCV.setAlpha(0f);
+                                userDpCV.setVisibility(View.VISIBLE);
+                                AlphaAnimation dp_alphaAnimation = new AlphaAnimation(0.0f, 1.0f);
+                                dp_alphaAnimation.setDuration(2500);
+                                userDpCV.startAnimation(dp_alphaAnimation);
+
+
+                                Log.i(TAG, "parsing-getProfileUrl: ");
+                                userProfileUrl = userModel.getProfileUrl();
+                                Log.e(TAG, "onDataChange: userprofile url: " + userProfileUrl);
+                                Glide.with(requireContext())
+                                        .load(userProfileUrl)////getResources().getDrawable(R.drawable.ic_std_avatar_male)
+                                        .fitCenter()
+                                        .placeholder(R.drawable.ic_wait_white)
+                                        .diskCacheStrategy(DiskCacheStrategy.DATA)
+                                        .error(R.drawable.ic_std_avatar_male)
+                                        .into(userImageIV);
+                                // Picasso.get().load(userProfileUrl).into(userProfileIV);
+
+
+
+                            } else {
+
+                                if (userModel.getGender() != null) {
+                                    if (userModel.getGender().equals("Male")) {
+                                        userImageIV.setImageResource(R.drawable.ic_std_avatar_male);
+                                    } else {
+                                        userImageIV.setImageResource(R.drawable.ic_std_avatar_female);
+                                    }
+                                } else {
+                                    userImageIV.setImageResource(R.drawable.ic_std_avatar_male);
+                                }
+                            }
+                        }
+                        catch (Exception e){
+                            Log.e(TAG, "Exception onDataChange: "+e.getLocalizedMessage() );
+
+                        }
+                        // Exist! Do something.
+                        // Toast.makeText(requireContext(), " load data success", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "snapshot value : "+snapshot.getValue());
+
+                        userProfileInfoBoxLL.setAlpha(0);
+                        userProfileInfoBoxLL.setVisibility(View.VISIBLE);
+                        userProfileInfoBoxLL.animate().alpha(1).setDuration(1000).start();
+                        userProfileInfoBoxLL.animate().translationYBy(30).setDuration(1500).start();
+                    } else {
+
+                        userProfileInfoBoxLL.setVisibility(View.GONE);
+                        // Don't exist! Do something.
+                        Toast.makeText(requireContext(), "Profile Error ", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e(TAG, "onCancelled: "+error.getDetails() );
+                }
+
+            });
+        }
+
+
     }
 
 

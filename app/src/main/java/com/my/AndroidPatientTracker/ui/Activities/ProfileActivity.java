@@ -32,7 +32,7 @@ import com.google.firebase.storage.StorageReference;
 import com.my.AndroidPatientTracker.R;
 import com.my.AndroidPatientTracker.models.UserModel;
 import com.my.AndroidPatientTracker.ui.Authentication.LoginActivity;
-import com.my.AndroidPatientTracker.ui.FindDoctors.RecycleDoctorsActivity;
+
 import com.my.AndroidPatientTracker.utils.MyUtils;
 
 import java.io.IOException;
@@ -298,10 +298,10 @@ public class ProfileActivity extends AppCompatActivity {
             email = types.getEmail();
             gender = types.getGender();
             id = types.getId();
-            imageURL = types.getImageURL();
+            imageURL = types.getProfileImageUrl();
             password = types.getPassword();
             phone = types.getPhone();
-            username = types.getUsername();
+            username = types.getName();
 
             profileUsername.setText(username);
             profileEmail.setText(email);
@@ -324,29 +324,6 @@ public class ProfileActivity extends AppCompatActivity {
 
 
 
-
-    public void btn_all_doctor_click(View v){
-        this.startActivity(new Intent(v.getContext(), RecycleDoctorsActivity.class));
-        this.overridePendingTransition(0, 0);
-        finish();
-    }
-
-    public void btn_guide_click(View v){
-       // this.startActivity(new Intent(v.getContext(), GuidePageActivity.class));
-        this.overridePendingTransition(0, 0);
-        finish();
-    }
-
-    public void btn_seting_click(View v){
-        startActivity(new Intent(this, RecycleDoctorsActivity.class) );
-        finish();
-    }
-    public void btn_home_click(View v){
-        // startActivity(new Intent(this, ProfileActivity.class) );
-        this.startActivity(new Intent(v.getContext(), HomeActivity.class));
-        this.overridePendingTransition(0, 0);
-        finish();
-    }
 
 
 

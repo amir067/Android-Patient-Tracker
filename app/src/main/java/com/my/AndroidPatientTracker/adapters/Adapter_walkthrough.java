@@ -5,9 +5,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
-import com.my.AndroidPatientTracker.ui.Fragments.Fragment_walkthroughone;
-import com.my.AndroidPatientTracker.ui.Fragments.Fragment_walkthroughthree;
-import com.my.AndroidPatientTracker.ui.Fragments.Fragment_walkthroughtwo;
+import com.my.AndroidPatientTracker.Fragments.Fragment_walkthroughone;
+import com.my.AndroidPatientTracker.Fragments.Fragment_walkthroughthree;
+import com.my.AndroidPatientTracker.Fragments.Fragment_walkthroughtwo;
 
 
 public class Adapter_walkthrough extends FragmentStatePagerAdapter {

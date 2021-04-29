@@ -17,7 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.my.AndroidPatientTracker.Interface.ItemClickListener;
 import com.my.AndroidPatientTracker.R;
 import com.my.AndroidPatientTracker.models.DoctorsModel;
-import com.my.AndroidPatientTracker.ui.FindDoctors.RecycleDoctorsActivity;
+
 import com.my.AndroidPatientTracker.viewholder.DoctorsViewHolder;
 
 
@@ -106,28 +106,6 @@ public class InfoActivity extends AppCompatActivity {
 
 
 
-    public void btn_home_click(View v){
-        this.startActivity(new Intent(v.getContext(), HomeActivity.class));
-        this.overridePendingTransition(0, 0);
-        finish();
-    }
-
-    public void btn_all_doctor_click(View v){
-        this.startActivity(new Intent(v.getContext(), RecycleDoctorsActivity.class));
-        this.overridePendingTransition(0, 0);
-        finish();
-    }
-
-    public void btn_seting_click(View v){
-        startActivity(new Intent(this, InfoActivity.class) );
-        finish();
-    }
-    public void btn_profile_click(View v){
-        // startActivity(new Intent(this, ProfileActivity.class) );
-        this.startActivity(new Intent(v.getContext(), ProfileActivity.class));
-        this.overridePendingTransition(0, 0);
-        finish();
-    }
 
 
 }

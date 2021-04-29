@@ -6,33 +6,6 @@
     app:startDestination="@id/navigation_home_fragment">
 
 
-    <fragment
-        android:id="@+id/navigation_home_fragment"
-        android:name="com.my.AndroidPatientTracker.ui.Dashboard.HomeFragment"
-        android:label="DashBoardFragment"
-        tools:layout="@layout/fragment_home">
-
-        <action
-            android:id="@+id/action_navigation_home_fragment_to_startTestFragment"
-            app:destination="@id/startTestFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:popExitAnim="@anim/fragment_open_exit" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/navigation_find_doctor_fragment"
-        android:name="com.my.AndroidPatientTracker.ui.FindDoctors.FindDoctorsFragment"
-        android:label="DashBoardFragment"
-        tools:layout="@layout/fragment_find_doctors">
-    </fragment>
-
-    <fragment
-        android:id="@+id/navigation_profile_fragment"
-        android:name="com.my.AndroidPatientTracker.ui.Profile.ProfileFragment"
-        android:label="DashBoardFragment"
-        tools:layout="@layout/fragment_profile">
-    </fragment>
-
 
     <activity
         android:id="@+id/splashActivity"
@@ -42,67 +15,58 @@
 
 
     <fragment
-        android:id="@+id/startTestFragment"
-        android:name="com.my.AndroidPatientTracker.ui.StartTest.StartTestFragment"
-        android:label="fragment_start_test"
-        tools:layout="@layout/fragment_start_test" >
+        android:id="@+id/navigation_home_fragment"
+        android:name="com.my.AndroidPatientTracker.ui.Dashboard.HomeFragment"
+        android:label="DashBoardFragment"
+        tools:layout="@layout/fragment_home">
         <action
-            android:id="@+id/action_startTestFragment_to_natureFragment"
-            app:destination="@id/natureFragment" />
+            android:id="@+id/action_navigation_home_fragment_to_patientsFragment"
+            app:destination="@id/navigation_view_patients_fragment" />
+        <action
+            android:id="@+id/action_navigation_home_fragment_to_navigation_profile_fragment"
+            app:destination="@id/navigation_profile_fragment" />
+        <action
+            android:id="@+id/action_navigation_home_fragment_to_roomsFragment"
+            app:destination="@id/navigation_room_fragment" />
     </fragment>
 
 
+
     <fragment
-        android:id="@+id/natureFragment"
-        android:name="com.my.AndroidPatientTracker.ui.StartTest.NatureFragment"
-        android:label="fragment_nature"
-        tools:layout="@layout/fragment_nature" >
+        android:id="@+id/navigation_view_patients_fragment"
+        android:name="com.my.AndroidPatientTracker.ui.Patients.PatientsFragment"
+        android:label="fragment_patients"
+        tools:layout="@layout/fragment_patients" />
+
+    <fragment
+        android:id="@+id/navigation_room_fragment"
+        android:name="com.my.AndroidPatientTracker.ui.Rooms.RoomsFragment"
+        android:label="fragment_rooms"
+        tools:layout="@layout/fragment_rooms" />
+
+    <fragment
+        android:id="@+id/navigation_profile_fragment"
+        android:name="com.my.AndroidPatientTracker.ui.Profile.ProfileFragment2"
+        android:label="ProfileFragment2"
+        tools:layout="@layout/fragment_profile2">
+
         <action
-            android:id="@+id/action_natureFragment_to_placesFragment"
-            app:destination="@id/placesFragment" />
+            android:id="@+id/action_navigation_profile_fragment_to_homeActivity"
+            app:destination="@id/LoginActivity" />
     </fragment>
+
     <fragment
-        android:id="@+id/placesFragment"
-        android:name="com.my.AndroidPatientTracker.ui.StartTest.PlacesFragment"
-        android:label="fragment_places"
-        tools:layout="@layout/fragment_places" >
-        <action
-            android:id="@+id/action_placesFragment_to_accessoriesFragment"
-            app:destination="@id/accessoriesFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/accessoriesFragment"
-        android:name="com.my.AndroidPatientTracker.ui.StartTest.AccessoriesFragment"
-        android:label="fragment_accessories"
-        tools:layout="@layout/fragment_accessories" >
-        <action
-            android:id="@+id/action_accessoriesFragment_to_colorFragment"
-            app:destination="@id/colorFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/colorFragment"
-        android:name="com.my.AndroidPatientTracker.ui.StartTest.ColorFragment"
-        android:label="ColorFragment"
-        tools:layout="@layout/fragment_colors"
-        >
-        <action
-            android:id="@+id/action_colorFragment_to_petsFragment"
-            app:destination="@id/petsFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/petsFragment"
-        android:name="com.my.AndroidPatientTracker.ui.StartTest.PetsFragment"
-        android:label="fragment_pets"
-        tools:layout="@layout/fragment_pets" >
-        <action
-            android:id="@+id/action_petsFragment_to_faceRecFragment"
-            app:destination="@id/faceRecFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/faceRecFragment"
-        android:name="com.my.AndroidPatientTracker.ui.StartTest.FaceRecFragment"
-        android:label="fragment_face_rec"
-        tools:layout="@layout/fragment_face_rec" />
+        android:id="@+id/loginFragment"
+        android:name="com.my.AndroidPatientTracker.ui.Authentication.LoginFragment"
+        tools:layout="@layout/fragment_login"
+        android:label="LoginFragment" />
+
+
+    <activity
+        android:id="@+id/LoginActivity"
+        android:name="com.my.AndroidPatientTracker.ui.Authentication.LoginActivity"
+        tools:layout="@layout/activity_main"
+        android:label="LoginActivity" />
 
 
 </navigation>

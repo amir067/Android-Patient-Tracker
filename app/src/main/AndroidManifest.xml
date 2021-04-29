@@ -40,9 +40,6 @@
             />
         <activity android:name="com.my.AndroidPatientTracker.ui.Authentication.ResetPsd"
             android:theme="@style/LoginActivityTheme"/>
-        <activity
-            android:name="com.my.AndroidPatientTracker.ui.Activities.HomeActivity"
-            android:theme="@style/BasicAppTheme" />
 
         <activity android:name="com.my.AndroidPatientTracker.ui.Activities.InfoActivity" />
 

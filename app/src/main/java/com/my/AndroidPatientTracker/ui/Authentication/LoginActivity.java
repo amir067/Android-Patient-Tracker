@@ -119,7 +119,7 @@ public class LoginActivity extends AppCompatActivity {
         backpress = (backpress + 1);
         Toast.makeText(getApplicationContext(), " Press Back again to Exit ", Toast.LENGTH_SHORT).show();
         if (backpress > 1) {
-            this.finish();
+            System.exit(1);
         }
     }
 

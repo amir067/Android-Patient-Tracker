@@ -237,6 +237,11 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
                 placeId.putString("roomName",(roomsList.get(position).getName()));
                // navController.navigate(R.id.action_navigation_home_fragment_to_placeDetailFragment,placeId);
             }
+
+            @Override
+            public void onItemLongClick(int position, View v) {
+
+            }
         });
 
 
@@ -248,6 +253,11 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
                 placeId.putInt("patientId",Integer.parseInt(roomsList.get(position).getId()));
                 placeId.putString("patientName",(roomsList.get(position).getName()));
                 // navController.navigate(R.id.action_navigation_home_fragment_to_placeDetailFragment,placeId);
+            }
+
+            @Override
+            public void onItemLongClick(int position, View v) {
+
             }
         });
 
@@ -406,6 +416,11 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
      //   placeId.putString("placeType",(  placesSuggestionsAdapter.getPlacesList().get(position).getCategoryType() ));
 
      //   navController.navigate(R.id.action_navigation_home_fragment_to_placeDetailFragment,placeId);
+
+    }
+
+    @Override
+    public void onItemLongClick(int position, View v) {
 
     }
 

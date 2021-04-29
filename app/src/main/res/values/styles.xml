@@ -140,6 +140,36 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/windowBackground</item>
         <item name="android:colorBackground">@color/windowBackground</item>
+        <item name="android:buttonTint">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="AlertDialogCustom" parent="Theme.MaterialComponents.Dialog">
+        <!--buttons color-->
+        <item name="colorAccent">@color/colorPrimary</item>
+        <!--item RadioButton or CheckBox color-->
+        <item name="colorControlActivated">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorAccent</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:minWidth" type="dimen">600dp</item>
+        <item name="android:layout_margin" type="dimen">8dp</item>
+        <item name="android:statusBarColor">#00BCD4</item>
+    </style>
+
+    <style name="MyRounded.MaterialComponents.MaterialAlertDialog" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.App.CustomDialog.Rounded
+        </item>
+        <item name="colorSurface">@color/white</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.App.CustomDialog.Rounded" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">10dp</item>
+    </style>
+
+
+    <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/popup_background</item>
     </style>
 
 

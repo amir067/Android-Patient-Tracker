@@ -75,6 +75,7 @@
                             android:id="@+id/btn_et"
                             android:layout_width="100dp"
                             android:layout_height="55dp"
+                            android:backgroundTint="#03A9F4"
                             android:text="Edit"
                             android:textAllCaps="false"
                             app:cornerRadius="12dp" />
@@ -141,7 +142,7 @@
                                 android:layout_margin="5dp"
                                 android:fontFamily="@font/nexa_bold"
                                 android:text="Email"
-                                android:textColor="#7568EF"
+                                android:textColor="#2196F3"
                                 android:textSize="18dp" />
 
                             <TextView
@@ -174,7 +175,7 @@
                                 android:layout_margin="5dp"
                                 android:fontFamily="@font/nexa_bold"
                                 android:text="Phone Number"
-                                android:textColor="#7568EF"
+                                android:textColor="#2196F3"
                                 android:textSize="18dp" />
 
                             <TextView
@@ -207,7 +208,7 @@
                                 android:layout_margin="5dp"
                                 android:fontFamily="@font/nexa_bold"
                                 android:text="Address"
-                                android:textColor="#7568EF"
+                                android:textColor="#2196F3"
                                 android:textSize="18dp" />
 
                             <TextView
@@ -233,13 +234,14 @@
                         android:layout_marginBottom="10dp"
                         android:background="#D3D1D1" />
 
-                    <com.google.android.material.button.MaterialButton
+                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/btn_sign_out"
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
+                        android:layout_height="50dp"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
                         android:layout_marginBottom="50dp"
+                        android:background="@drawable/bg_box_shade_round_gradient_light_blue"
                         android:fontFamily="@font/monts3"
                         android:gravity="center"
                         android:padding="0dp"

@@ -186,11 +186,11 @@
                                 android:id="@+id/rv_rooms"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="15dp"
-                                android:layout_marginLeft="15dp"
                                 android:layout_marginTop="10dp"
                                 android:background="@android:color/transparent"
+                                android:clipToPadding="false"
                                 android:orientation="horizontal"
+                                android:paddingStart="10dp"
                                 tools:itemCount="5"
                                 tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                                 tools:listitem="@layout/item_view_room">
@@ -398,14 +398,7 @@
     </FrameLayout>
 
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="@dimen/fab_margin"
-        android:clickable="true"
-        android:src="@drawable/ic_baseline_add_24" />
+
 
 
     <ProgressBar

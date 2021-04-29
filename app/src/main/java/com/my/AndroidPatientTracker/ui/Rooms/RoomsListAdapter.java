@@ -19,6 +19,7 @@ public class RoomsListAdapter extends RecyclerView.Adapter<RoomsListAdapter.Myvi
     private static final String TAG = "RoomsListAdapter";
     private static OnClickListner onClickListner;
 
+
     Context context;
     List<RoomObject> roomsList;
     private RecyclerviewOnClickListener listener;
@@ -35,7 +36,7 @@ public class RoomsListAdapter extends RecyclerView.Adapter<RoomsListAdapter.Myvi
         View view = LayoutInflater.from(context).inflate(R.layout.item_view_room,parent,false);
         return new MyviewHolder(view);
     }
-    public static class MyviewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class MyviewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener {
 
         public TextView roomNameTV;
         public TextView roomStatusTV;
@@ -48,7 +49,7 @@ public class RoomsListAdapter extends RecyclerView.Adapter<RoomsListAdapter.Myvi
             roomStatusTV = (TextView) itemView.findViewById(R.id.tv_room_status);
             roomSpaceFilledTV = itemView.findViewById(R.id.tv_room_space_filled);
             itemView.setOnClickListener(this);
-
+            itemView.setOnLongClickListener(this);
         }
 
         @Override
@@ -56,6 +57,12 @@ public class RoomsListAdapter extends RecyclerView.Adapter<RoomsListAdapter.Myvi
             onClickListner.onItemClick(getAdapterPosition(), v);
         }
 
+
+        @Override
+        public boolean onLongClick(View v) {
+            onClickListner.onItemLongClick(getAdapterPosition(), v);
+            return true;
+        }
     }
     public void setOnItemClickListener(OnClickListner onclicklistner) {
         RoomsListAdapter.onClickListner = onclicklistner;
@@ -74,8 +81,9 @@ public class RoomsListAdapter extends RecyclerView.Adapter<RoomsListAdapter.Myvi
         TextView roomSpaceFilledTV = holder.roomSpaceFilledTV;
 
         roomNameTV.setText(roomsList.get(position).getName());
+
         roomStatusTV.setText(roomsList.get(position).getStatus());
-        roomSpaceFilledTV.setText(""+roomsList.get(position).getSpace_filled());
+        roomSpaceFilledTV.setText(""+roomsList.get(position).getSpace_filled().intValue());
 
         //Picasso.get().load(placeObjects.get(position).getImageURL()).into(placeImageURLIV);
 
@@ -85,6 +93,15 @@ public class RoomsListAdapter extends RecyclerView.Adapter<RoomsListAdapter.Myvi
                 listener.recyclerviewClick(position);
             }
         });
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                listener.onItemLongClick(position,v);
+                return  true;
+            }
+        });
+
 
     }
 
@@ -130,6 +147,12 @@ public class RoomsListAdapter extends RecyclerView.Adapter<RoomsListAdapter.Myvi
     }
 
 
+
+
+    public void doNotifyDataChanged() {
+        Log.i(TAG,"Adapter notified: notifyDataSetChanged()");
+        notifyDataSetChanged();
+    }
 
 
 }

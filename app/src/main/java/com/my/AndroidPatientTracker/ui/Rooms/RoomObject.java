@@ -8,7 +8,10 @@ public  class RoomObject {
 	private String id;
 	private String name;
 	private String status;
+	private Double space_total;
 	private Double space_filled;
+	private long added_at;
+	private long modified_at;
 
 	public RoomObject() {
 		// Default constructor required for calls to DataSnapshot.getValue(User.class)

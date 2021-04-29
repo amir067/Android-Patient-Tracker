@@ -89,6 +89,11 @@ public class PatientsFragment extends Fragment implements RecyclerviewOnClickLis
                 //placeId.putString("patientName",(roomsList.get(position).getName()));
                 // navController.navigate(R.id.action_navigation_home_fragment_to_placeDetailFragment,placeId);
             }
+
+            @Override
+            public void onItemLongClick(int position, View v) {
+
+            }
         });
 
 
@@ -154,6 +159,11 @@ public class PatientsFragment extends Fragment implements RecyclerviewOnClickLis
     @Override
     public void recyclerviewClick(int position) {
 
+
+    }
+
+    @Override
+    public void onItemLongClick(int position, View v) {
 
     }
 

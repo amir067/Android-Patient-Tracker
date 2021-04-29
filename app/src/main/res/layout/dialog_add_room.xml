@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Theme.MaterialComponents.Light.Dialog"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:theme="@style/Theme.MaterialComponents.Light.Dialog">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="#F5F6FA"
+        app:cardCornerRadius="24dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+
+                    android:layout_margin="5dp"
+                    app:cardBackgroundColor="#F2F2F4"
+                    app:cardCornerRadius="25dp"
+                    app:cardElevation="2dp">
+
+                    <ImageView
+                        android:id="@+id/imageView9"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_baseline_bedroom_parent_24" />
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/today_date_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nexa_bold"
+                    android:gravity="center"
+                    android:text="Add Room"
+                    android:textColor="#1F1868"
+
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/et_room_name"
+                    android:layout_width="280dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edge_border"
+                    android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789 "
+                    android:drawableLeft="@drawable/ic_baseline_notes_24"
+                    android:drawablePadding="8dp"
+                    android:hint="Enter Room Name"
+                    android:padding="10dp"
+
+                    tools:ignore="DuplicateIds" />
+
+                <EditText
+                    android:id="@+id/et_room_beds"
+                    android:layout_width="280dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edge_border"
+                    android:digits="1234567890"
+                    android:drawableLeft="@drawable/ic_baseline_bedroom_parent_24"
+                    android:drawablePadding="8dp"
+                    android:hint="Enter No of Bedooms"
+                    android:inputType="number"
+                    android:padding="10dp"
+                    tools:ignore="DuplicateIds" />
+
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/add_room_btn"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/bg_box_shade_round_gradient_light_blue"
+                android:fontFamily="@font/helveticaneue_medium_bold"
+                android:text="Add Room"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="18dp"
+                app:cornerRadius="15dp"
+                app:rippleColor="#E91E63" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/cancel_btn"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/bg_button_gradient_white"
+                android:fontFamily="@font/nexa_bold"
+                android:text="Cancel"
+                android:textAllCaps="false"
+                android:textColor="#4C4C4C"
+                app:cornerRadius="10dp"
+                app:rippleColor="#E91E63" />
+        </LinearLayout>
+
+
+
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

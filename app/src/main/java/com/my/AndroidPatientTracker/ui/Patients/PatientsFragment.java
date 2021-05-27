@@ -3,6 +3,7 @@ package com.my.AndroidPatientTracker.ui.Patients;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
@@ -127,6 +128,19 @@ public class PatientsFragment extends Fragment implements RecyclerviewOnClickLis
                // placeId.putInt("patientId",Integer.parseInt(roomsList.get(position).getId()));
                 //placeId.putString("patientName",(roomsList.get(position).getName()));
                 // navController.navigate(R.id.action_navigation_home_fragment_to_placeDetailFragment,placeId);
+
+                Intent intent = new Intent(requireContext(), PatientDetailActivity.class);
+                intent.putExtra("id",(patientsList.get(position).getId()));
+                intent.putExtra("name", patientsList.get(position).getName() );
+                // intent.putExtra("address",machinicList.get(position).getAddress() );
+                // intent.putExtra("phone",patientsList.get(position).get() );
+                intent.putExtra("desc",patientsList.get(position).getUserBio() );
+                intent.putExtra("img",patientsList.get(position).getProfileImageUrl() );
+                // intent.putExtra("lat",patientsList.get(position).getLatMAP() );
+                //intent.putExtra("long",patientsList.get(position).getLongMAP() );
+                startActivity(intent);
+
+
             }
 
             @Override

@@ -13,6 +13,13 @@
     <color name="colorPrimaryDark">#0099FF</color>
     <color name="colorAccent">#42A5F5</color>
 
+    <color name="colorPrimaryHeading">#2196F3</color>/////App Color
+    <color name="colorPrimaryBody">#2196F3</color>////// App Color
+
+
+    <color name="GradientColor3">#2196F3</color>
+    <color name="GradientColor4">#2196F3</color>
+    <color name="button_tint">#0E254D</color>
 
     <color name="APTColorA1">#02AFD2</color>
     <color name="APTColorA2">#03CCC9</color>

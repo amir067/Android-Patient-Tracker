@@ -32,6 +32,33 @@
             android:textSize="30dp"
             android:textStyle="normal" />
 
+
+        <RadioGroup
+            android:id="@+id/rg_user_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:orientation="horizontal"
+            android:gravity="left">
+
+            <RadioButton
+                android:id="@+id/rb_patient"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="#03A9F4"
+                android:checked="true"
+                android:text="I am a Patient" />
+
+            <RadioButton
+                android:id="@+id/rb_doctor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="#03A9F4"
+                android:text="i am a Doctor" />
+        </RadioGroup>
+
+
+
         <EditText
             android:id="@+id/r_username"
             android:layout_width="match_parent"
@@ -39,7 +66,7 @@
             android:layout_margin="10dp"
             android:background="@drawable/edge_border"
             android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
-            android:hint="Username"
+            android:hint="Enter your Name"
             android:padding="10dp"
 
             tools:ignore="DuplicateIds" />
@@ -51,7 +78,7 @@
             android:layout_margin="10dp"
             android:background="@drawable/edge_border"
             android:digits="0123456789"
-            android:hint="Phone Number"
+            android:hint="Enter your Phone Number"
             android:inputType="phone"
             android:padding="10dp" />
 
@@ -61,7 +88,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@drawable/edge_border"
-            android:hint="Age"
+            android:hint="Enter your Age"
             android:inputType="numberSigned"
             android:padding="10dp"
 
@@ -73,7 +100,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@drawable/edge_border"
-            android:hint="Email"
+            android:hint="Enter your Email"
             android:inputType="textEmailAddress"
             android:padding="10dp" />
 
@@ -83,7 +110,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@drawable/edge_border"
-            android:hint="Password"
+            android:hint="Enter your Password"
             android:inputType="textPassword"
             android:padding="10dp" />
 

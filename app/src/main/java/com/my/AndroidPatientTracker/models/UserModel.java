@@ -4,25 +4,53 @@ package com.my.AndroidPatientTracker.models;
 import com.google.firebase.Timestamp;
 import com.google.firebase.database.IgnoreExtraProperties;
 
-@IgnoreExtraProperties
-public class UserModel {
+import java.io.Serializable;
 
+@IgnoreExtraProperties
+public class UserModel implements Serializable {
+
+    public  String id;
     public  String name;
     public  String email;
     public  String phone;
     public  String gender;
     public  String password;
     public  String age;
-    public  String id;
-
+    private String RoomID;
+    private String RoomName;
+    private String userType;
     public  String userBio;
     public  String profileImageUrl;
     public  String address;
+
+    //For All users
+    private boolean userApproved;
+    private boolean isAdmin;
 
     public long updated_at,created_at;
 
     public UserModel() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
+    }
+
+    public UserModel(String id, String name, String email, String phone, String gender,
+                     String password, String age, String userType, String userBio, String profileImageUrl,
+                     String address, boolean userApproved, boolean isAdmin, long updated_at, long created_at) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.gender = gender;
+        this.password = password;
+        this.age = age;
+        this.userType = userType;
+        this.userBio = userBio;
+        this.profileImageUrl = profileImageUrl;
+        this.address = address;
+        this.userApproved = userApproved;
+        this.isAdmin = isAdmin;
+        this.updated_at = updated_at;
+        this.created_at = created_at;
     }
 
     public String getPassword() {
@@ -128,5 +156,45 @@ public class UserModel {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
+
+    public boolean isUserApproved() {
+        return userApproved;
+    }
+
+    public void setUserApproved(boolean userApproved) {
+        this.userApproved = userApproved;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
+    public String getRoomID() {
+        return RoomID;
+    }
+
+    public void setRoomID(String roomID) {
+        RoomID = roomID;
+    }
+
+    public String getRoomName() {
+        return RoomName;
+    }
+
+    public void setRoomName(String roomName) {
+        RoomName = roomName;
     }
 }

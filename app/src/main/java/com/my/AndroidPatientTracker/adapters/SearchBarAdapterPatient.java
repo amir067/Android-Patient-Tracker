@@ -13,13 +13,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 import com.my.AndroidPatientTracker.Interface.RecyclerviewOnClickListener;
 import com.my.AndroidPatientTracker.R;
-import com.my.AndroidPatientTracker.ui.Patients.PatientObject;
+import com.my.AndroidPatientTracker.models.UserModel;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class SearchBarAdapterPatient extends SuggestionsAdapter<PatientObject, SearchBarAdapterPatient.SuggestionHolder> {
+public class SearchBarAdapterPatient extends SuggestionsAdapter<UserModel, SearchBarAdapterPatient.SuggestionHolder> {
 
     private RecyclerviewOnClickListener listener1;
 
@@ -28,7 +29,7 @@ public class SearchBarAdapterPatient extends SuggestionsAdapter<PatientObject, S
         this.listener1=Listener;
     }
 
-    public List<PatientObject> getPlacesList() {
+    public List<UserModel> getPlacesList() {
         Log.d("returning suggestions",String.valueOf(suggestions.size()));
         return  suggestions ;
     }
@@ -45,7 +46,7 @@ public class SearchBarAdapterPatient extends SuggestionsAdapter<PatientObject, S
     }
 
     @Override
-    public void onBindSuggestionHolder(PatientObject suggestion, SuggestionHolder holder, int position) {
+    public void onBindSuggestionHolder(UserModel suggestion, SuggestionHolder holder, int position) {
         holder.title.setText(suggestion.getName());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +79,7 @@ public class SearchBarAdapterPatient extends SuggestionsAdapter<PatientObject, S
                     suggestions = suggestions_clone;
                 else {
                     suggestions = new ArrayList<>();
-                    for (PatientObject item: suggestions_clone)
+                    for (UserModel item: suggestions_clone)
                         if(item.getName().toLowerCase().contains(term.toLowerCase()))
                             suggestions.add(item);
                 }
@@ -88,7 +89,7 @@ public class SearchBarAdapterPatient extends SuggestionsAdapter<PatientObject, S
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                suggestions = (ArrayList<PatientObject>) results.values;
+                suggestions = (ArrayList<UserModel>) results.values;
                 notifyDataSetChanged();
             }
         };

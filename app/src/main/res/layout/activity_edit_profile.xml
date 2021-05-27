@@ -79,11 +79,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:background="@drawable/rounded_border_button"
-            android:fontFamily="@font/monte"
+            android:background="@drawable/rounded_border_buttonorange"
+            android:fontFamily="@font/montebold"
+            android:padding="0dp"
             android:text="@string/ok"
             android:textAlignment="center"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="#FFFFFF"
             android:textSize="24sp"
             android:textStyle="bold" />
 

@@ -48,6 +48,7 @@ import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.my.AndroidPatientTracker.Interface.RecyclerviewOnClickListener;
 import com.my.AndroidPatientTracker.R;
 import com.my.AndroidPatientTracker.adapters.SearchBarAdapterPatient;
+import com.my.AndroidPatientTracker.models.UserModel;
 import com.my.AndroidPatientTracker.ui.Rooms.RoomObject;
 import com.my.AndroidPatientTracker.utils.MyUtils;
 import com.my.AndroidPatientTracker.utils.Tools;
@@ -75,7 +76,7 @@ public class PatientsFragment extends Fragment implements RecyclerviewOnClickLis
 
     //Patients
     private RecyclerView patientsRV;
-    protected List<PatientObject> patientsList = new ArrayList<>();
+    protected List<UserModel> patientsList = new ArrayList<>();
     protected PatientsListAdapterV2 patientsListAdapter ;
 
     //RoomList for add patients
@@ -311,10 +312,10 @@ public class PatientsFragment extends Fragment implements RecyclerviewOnClickLis
         Log.e(TAG, "do Adding Patient.. " );
 
         HashMap<Object, Object> PatientMap = new HashMap<>();
-        PatientMap.put("Id",String.valueOf(randomId));
-        PatientMap.put("Name",pName);
-        PatientMap.put("Age",Double.valueOf(pAge));
-        PatientMap.put("Gender",pGender);
+        PatientMap.put("id",String.valueOf(randomId));
+        PatientMap.put("name",pName);
+        PatientMap.put("age",Double.valueOf(pAge));
+        PatientMap.put("gender",pGender);
         PatientMap.put("RoomID",pRoomNameIndexID);
         PatientMap.put("RoomName",pRoom);
         PatientMap.put("added_at",new Date().getTime());
@@ -345,10 +346,10 @@ public class PatientsFragment extends Fragment implements RecyclerviewOnClickLis
         Log.e(TAG, "do Addmitting Patient to room.. " );
 
         HashMap<Object, Object> PatientMap = new HashMap<>();
-        PatientMap.put("Id",String.valueOf(patientId));
-        PatientMap.put("Name",pName);
-        PatientMap.put("Age",Double.valueOf(pAge));
-        PatientMap.put("Gender",Gender);
+        PatientMap.put("id",String.valueOf(patientId));
+        PatientMap.put("name",pName);
+        PatientMap.put("age",Double.valueOf(pAge));
+        PatientMap.put("gender",Gender);
        // PatientMap.put("RoomID",pRoomNameIndexID);
         PatientMap.put("added_at",new Date().getTime());
         PatientMap.put("modified_at",new Date().getTime());
@@ -464,20 +465,28 @@ public class PatientsFragment extends Fragment implements RecyclerviewOnClickLis
     private void loadPatientsList() {
         // loading_dialog.show();
 
-        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference("patients");
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference("Users");
         rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.exists()) {
 
-                    List<RoomObject> temp = new ArrayList<>();
+
 
                     Log.e(TAG, "onDataChange: "+snapshot.getValue().toString() );
 
                     for (DataSnapshot data :  snapshot.getChildren())
                     {
-                        PatientObject temObject = data.getValue(PatientObject.class);
-                        patientsList.add(temObject);
+
+                        if(data.child("userType").exists()){
+
+                            if(data.child("userType").getValue().equals("patient")){
+                                UserModel temObject = data.getValue(UserModel.class);
+                                patientsList.add(temObject);
+                            }
+
+                        }
+
                     }
 
                     patientsListAdapter.setPlaceObjects(patientsList);

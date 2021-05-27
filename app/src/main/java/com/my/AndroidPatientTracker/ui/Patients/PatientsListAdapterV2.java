@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.my.AndroidPatientTracker.Interface.RecyclerviewOnClickListener;
 import com.my.AndroidPatientTracker.R;
+import com.my.AndroidPatientTracker.models.UserModel;
 import com.my.AndroidPatientTracker.ui.Rooms.RoomObject;
 
 import java.util.ArrayList;
@@ -21,11 +22,11 @@ public class PatientsListAdapterV2 extends RecyclerView.Adapter<PatientsListAdap
     private static OnClickListner onClickListner;
 
     Context context;
-    List<PatientObject> patientsList;
+    List<UserModel> patientsList;
     private RecyclerviewOnClickListener listener;
 
     //constructor
-    public PatientsListAdapterV2(Context context, List<PatientObject> RoomsList, RecyclerviewOnClickListener Listener) {
+    public PatientsListAdapterV2(Context context, List<UserModel> RoomsList, RecyclerviewOnClickListener Listener) {
         this.context = context;
         this.patientsList = RoomsList;
         this.listener=Listener;
@@ -89,7 +90,7 @@ public class PatientsListAdapterV2 extends RecyclerView.Adapter<PatientsListAdap
 
         patientIDTV.setText(patientsList.get(position).getId());
         patientNameTV.setText(patientsList.get(position).getName());
-        patientAgeTV.setText(""+patientsList.get(position).getAge().intValue());
+        patientAgeTV.setText(""+patientsList.get(position).getAge());
         patientGenderTV.setText(patientsList.get(position).getGender());
         patientRoomTV.setText(patientsList.get(position).getRoomName());
 
@@ -112,12 +113,12 @@ public class PatientsListAdapterV2 extends RecyclerView.Adapter<PatientsListAdap
 
     }
 
-    public void filterList(ArrayList<PatientObject> filteredList) {
+    public void filterList(ArrayList<UserModel> filteredList) {
         patientsList = filteredList;
         notifyDataSetChanged();
     }
 
-    public void setPlaceObjects(List<PatientObject> AlertList) {
+    public void setPlaceObjects(List<UserModel> AlertList) {
         this.patientsList = AlertList;
         Log.d("checkid",String.valueOf(patientsList.size())+"adpter");
         notifyDataSetChanged();
@@ -129,18 +130,18 @@ public class PatientsListAdapterV2 extends RecyclerView.Adapter<PatientsListAdap
         notifyDataSetChanged();
     }
 
-    public void mergeList(List<PatientObject> AlertList) {
+    public void mergeList(List<UserModel> AlertList) {
         this.patientsList.addAll(AlertList);
         Log.d("appendedlistsize",String.valueOf(patientsList.size()));
         notifyDataSetChanged();
     }
 
-    public List<PatientObject> getPatientsList() {
+    public List<UserModel> getPatientsList() {
         Log.d("returning List in adptr",String.valueOf(patientsList.size()));
         return patientsList;
     }
 
-    public PatientObject getPatient(int index) {
+    public UserModel getPatient(int index) {
         Log.i(TAG,"returning place from adapter :"+String.valueOf(patientsList.get(index).getName()));
         return patientsList.get(index);
     }
@@ -153,7 +154,7 @@ public class PatientsListAdapterV2 extends RecyclerView.Adapter<PatientsListAdap
         return 0;
     }
 
-    public PatientObject getItem(int index) {
+    public UserModel getItem(int index) {
        // Log.i(TAG,"returning place from adapter :"+String.valueOf(roomsList.get(index).getName()));
         return patientsList.get(index);
     }

@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -29,6 +31,7 @@ import com.my.AndroidPatientTracker.utils.PreferenceHelperDemo;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,8 +66,22 @@ public class RegisterActivity extends AppCompatActivity {
     @BindView(R.id.r_gender)
     Spinner rGender;
 
+
+
+    //UI
+    @BindView(R.id.rg_user_type)
+    RadioGroup radioGroup;
+
+    @BindView(R.id.rb_patient)
+    RadioButton patientRB;
+
+    @BindView(R.id.rb_doctor)
+    RadioButton doctorRB;
+
+    //Database
+    String userName,userType,userEmail,userPhone,userPassword, userGender, userInstitute,userClass,userRegistrationNo;
+
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference blogsRef = db.collection("users");
 
     private static final String TAG = "RegisterActivity";
     private AlertDialog loading_dialog;
@@ -82,6 +99,21 @@ public class RegisterActivity extends AppCompatActivity {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.gender, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         rGender.setAdapter(adapter);
+
+        userType = "patient";
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if(group.getCheckedRadioButtonId()==patientRB.getId()){
+                    Log.e(TAG, "onCheckedChanged: user is student" );
+                    userType="patient";
+                }
+                else{
+                    Log.e(TAG, "onCheckedChanged: user is teacher" );
+                    userType="doctor";
+                }
+            }
+        });
 
 
     }
@@ -135,6 +167,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         if (rGender.getSelectedItemPosition() == 0) {
             Toast.makeText(this, "select your gender", Toast.LENGTH_SHORT).show();
+            rGender.performClick();
             return;
         }
 
@@ -148,43 +181,56 @@ public class RegisterActivity extends AppCompatActivity {
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
 
             if (task.isSuccessful()) {
-                loading_dialog.hide();
-                Toasty.success(RegisterActivity.this,"Sign Up Success. Please wait..",Toasty.LENGTH_SHORT).show();
+                //loading_dialog.hide();
+                //Toasty.success(RegisterActivity.this,"Sign Up Success. Please wait..",Toasty.LENGTH_SHORT).show();
 
                // loading.setVisibility(View.GONE);
 
                 FirebaseUser firebaseUser = auth.getCurrentUser();
 
-                String userid = firebaseUser.getUid();
+               // String userid = firebaseUser.getUid();
 
-                 DatabaseReference  reference = FirebaseDatabase.getInstance().getReference("Users").child(userid);
+                int randomId = new Random().nextInt(400000) + 1000; // [0, 60] + 20 => [20, 80]
+
+                 DatabaseReference  reference = FirebaseDatabase.getInstance().getReference("Users").child(String.valueOf(randomId));
 
                 Map<String, Object> register_user = new HashMap<>();
-                register_user.put("id", userid);
+                register_user.put("id", String.valueOf(randomId));
                 register_user.put("email", email);
                 register_user.put("password", password);
                 register_user.put("name", username);
                 register_user.put("phone", phone);
                 register_user.put("age", age);
+                register_user.put("userType", userType);
                 register_user.put("gender", gender);
                 register_user.put("created_at", new Date().getTime());
                 register_user.put("updated_at", new Date().getTime());
                 register_user.put("imageURL", "default");
 
+                if(userType.equals("patient")){
+                    register_user.put("userApproved", true);
+                }else{
+                    register_user.put("userApproved", false);
+                }
+                register_user.put("isAdmin", false);
+
+
+
                 reference.setValue(register_user).addOnSuccessListener(aVoid -> {
                     loading_dialog.dismiss();
+                    Toasty.success(RegisterActivity.this,"Sign Up Success.",Toasty.LENGTH_SHORT).show();
                     startActivity(new Intent(RegisterActivity.this, HomeActivity.class));
                     finish();
 
                 }).addOnFailureListener(e -> {
-                    Toasty.warning(RegisterActivity.this,"Profile update failed!",Toasty.LENGTH_SHORT).show();
+                    Toasty.warning(RegisterActivity.this,"Sign Up failed!",Toasty.LENGTH_SHORT).show();
                     // loading.setVisibility(View.INVISIBLE);
                     Log.e(TAG, "onFailure: " + e.getLocalizedMessage());
                     loading_dialog.dismiss();
                 });
 
             } else {
-                Log.d(TAG, "onComplete: " + task.getException().getMessage().toString());
+                Log.d(TAG, "onComplete: " + task.getException().getCause().getMessage());
                 Toasty.error(RegisterActivity.this, "You Can't register with this email /E-mail already register", Toast.LENGTH_SHORT).show();
                // loading.setVisibility(View.INVISIBLE);
                 loading_dialog.dismiss();

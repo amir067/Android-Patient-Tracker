@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 import com.my.AndroidPatientTracker.Interface.RecyclerviewOnClickListener;
 import com.my.AndroidPatientTracker.R;
-import com.my.AndroidPatientTracker.ui.Patients.PatientObject;
+
 import com.my.AndroidPatientTracker.ui.Rooms.RoomObject;
 
 import java.util.ArrayList;

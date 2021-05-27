@@ -97,6 +97,8 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(new Intent(LoginActivity.this, ResetPsd.class));
     }
 
+
+
     private void updateUI(FirebaseUser user) {
 
         if (user != null) {
@@ -119,9 +121,17 @@ public class LoginActivity extends AppCompatActivity {
         backpress = (backpress + 1);
         Toast.makeText(getApplicationContext(), " Press Back again to Exit ", Toast.LENGTH_SHORT).show();
         if (backpress > 1) {
-            System.exit(1);
+            Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+            homeIntent.addCategory( Intent.CATEGORY_HOME );
+            homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(homeIntent);
         }
     }
+
+
+
+
+
 
     public void onLogin(View view) {
        // startActivity(new Intent(MainActivity.this, LoginActivity.class));

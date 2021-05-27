@@ -1,5 +1,6 @@
 package com.my.AndroidPatientTracker.ui.Dashboard;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -45,7 +46,9 @@ import com.my.AndroidPatientTracker.Interface.RecyclerviewOnClickListener;
 import com.my.AndroidPatientTracker.R;
 import com.my.AndroidPatientTracker.adapters.SearchBarAdapterPatient;
 import com.my.AndroidPatientTracker.models.UserModel;
-import com.my.AndroidPatientTracker.ui.Patients.PatientObject;
+import com.my.AndroidPatientTracker.ui.Activities.AdminActivity;
+import com.my.AndroidPatientTracker.ui.Patients.PatientDetailActivity;
+
 import com.my.AndroidPatientTracker.ui.Patients.PatientsListAdapter;
 import com.my.AndroidPatientTracker.ui.Rooms.RoomsSuggestionsAdapter;
 import com.my.AndroidPatientTracker.ui.Rooms.RoomObject;
@@ -78,13 +81,14 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
 
     //Patients
     private RecyclerView patientsRV;
-    protected List<PatientObject> patientsList = new ArrayList<>();
+    protected List<UserModel> patientsList = new ArrayList<>();
     protected PatientsListAdapter patientsListAdapter ;
     //private RoomsSuggestionsAdapter patientsSuggestionsAdapter;
 
     //UI
     private Button barButton1,barButton2,barButton3,barButton4,barButton5;
     private BottomNavigationView bottomNavigationView;
+    private Button adminPanel;
 
     private FrameLayout mainDataFrameLayout;
     private ImageView noInternetIV;
@@ -142,6 +146,7 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
         mainDataFrameLayout = view.findViewById(R.id.main_data_farme_layout);
         noInternetIV = view.findViewById(R.id.iv_no_connection);
         swipeRefreshLayout = view.findViewById(R.id.swipe_layout);
+        adminPanel = view.findViewById(R.id.adminPanel);
 
         searchBar = (MaterialSearchBar) view.findViewById(R.id.sb_places);
         searchBar.setHint("Search Patients");
@@ -168,6 +173,13 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
             @Override
             public void onClick(View v) {
                 navController.navigate(R.id.action_navigation_home_fragment_to_roomsFragment);
+            }
+        });
+
+        adminPanel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(requireContext(), AdminActivity.class));
             }
         });
 
@@ -274,6 +286,20 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
                 Log.e(TAG, "recyclerviewClick: patient clicked" );
                 Bundle placeId = new Bundle();
                 // navController.navigate(R.id.action_navigation_home_fragment_to_placeDetailFragment,placeId);
+
+
+                Intent intent = new Intent(requireContext(), PatientDetailActivity.class);
+                intent.putExtra("id",(patientsList.get(position).getId()));
+                intent.putExtra("name", patientsList.get(position).getName() );
+               // intent.putExtra("address",machinicList.get(position).getAddress() );
+               // intent.putExtra("phone",patientsList.get(position).get() );
+                intent.putExtra("desc",patientsList.get(position).getUserBio() );
+                intent.putExtra("img",patientsList.get(position).getProfileImageUrl() );
+               // intent.putExtra("lat",patientsList.get(position).getLatMAP() );
+                //intent.putExtra("long",patientsList.get(position).getLongMAP() );
+                startActivity(intent);
+
+
             }
 
             @Override
@@ -371,7 +397,7 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
     private void loadPatientsList() {
         // loading_dialog.show();
 
-        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference("patients");
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference("Users");
         rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -381,11 +407,28 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
 
                     Log.e(TAG, "onDataChange: "+snapshot.getValue().toString() );
 
+                    /*for (DataSnapshot data :  snapshot.getChildren())
+                    {
+                        UserModel temObject = data.getValue(UserModel.class);
+                        patientsList.add(temObject);
+                    }*/
+
+
                     for (DataSnapshot data :  snapshot.getChildren())
                     {
-                        PatientObject temObject = data.getValue(PatientObject.class);
-                        patientsList.add(temObject);
+
+                        if(data.child("userType").exists()){
+
+                            if(data.child("userType").getValue().equals("patient")){
+                                UserModel temObject = data.getValue(UserModel.class);
+                                patientsList.add(temObject);
+                            }
+
+                        }
+
                     }
+
+
 
                     patientsListAdapter.setPlaceObjects(patientsList);
                     searchBarAdapterPatient.setSuggestions(patientsList);
@@ -490,6 +533,7 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
 
 
     private void getUserData() {
+        Log.e(TAG, "getUserData: gettingg. home fragment.." );
 
         //loadingAnimationViewDots.setVisibility(View.VISIBLE);
         //loading_dialog.show();
@@ -510,10 +554,12 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
                     if (snapshot.exists()) {
+                        Log.e(TAG, "snapshot: exists" );
 
                         try {
 
                             UserModel userModel = snapshot.getValue(UserModel.class);
+
                             if (!userModel.getName().isEmpty()) {
 
                                 user_name.setText("Welcome, " + userModel.getName());
@@ -526,6 +572,20 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
                                 user_address.setVisibility(View.GONE);
                             }
 
+                            Log.e(TAG, "parsing-isAdmin: " + userModel.isAdmin());
+
+                            if(snapshot.child("isAdmin").exists() ){
+
+                                Log.e(TAG, "isAdmin: if isAdmin true ok" );
+
+                                if((boolean)snapshot.child("isAdmin").getValue()){
+                                    adminPanel.setVisibility(View.VISIBLE);
+                                }
+
+                            }else{
+                                Log.e(TAG, "isAdmin: else isAdmin true ok" );
+                                adminPanel.setVisibility(View.GONE);
+                            }
 
                             if (userModel.getProfileUrl() != null) {
 
@@ -564,7 +624,7 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
                             }
                         }
                         catch (Exception e){
-                            Log.e(TAG, "Exception onDataChange: "+e.getLocalizedMessage() );
+                            Log.e(TAG, "Exception Error: "+e.getLocalizedMessage() );
 
                         }
                         // Exist! Do something.

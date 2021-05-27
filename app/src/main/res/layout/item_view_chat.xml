@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_marginLeft="25dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginBottom="5dp"
     android:foreground="@drawable/ripple_effect_white_bg"
     app:cardBackgroundColor="#00BCD4"
     app:cardCornerRadius="10dp"
@@ -65,14 +68,12 @@
                         android:id="@+id/userName"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        />
+                        android:layout_weight="1" />
 
                     <TextView
                         android:id="@+id/timeAgo"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                         />
+                        android:layout_height="match_parent" />
 
                 </LinearLayout>
 

@@ -105,7 +105,13 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.Myview
        // roomSpaceFilledTV.setText(""+roomsList.get(position).getSpace_filled().intValue());
 
         if(roomsList.get(position).getSenderImage() !=null){
-            Picasso.get().load(roomsList.get(position).getSenderImage()).into(holder.userImage);
+
+            if(roomsList.get(position).getSenderImage().isEmpty()){
+
+            }else{
+                Picasso.get().load(roomsList.get(position).getSenderImage()).into(holder.userImage);
+            }
+
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

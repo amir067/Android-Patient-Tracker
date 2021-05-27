@@ -188,14 +188,15 @@ public class RegisterActivity extends AppCompatActivity {
 
                 FirebaseUser firebaseUser = auth.getCurrentUser();
 
-               // String userid = firebaseUser.getUid();
+                String userid = firebaseUser.getUid();
 
                 int randomId = new Random().nextInt(400000) + 1000; // [0, 60] + 20 => [20, 80]
 
-                 DatabaseReference  reference = FirebaseDatabase.getInstance().getReference("Users").child(String.valueOf(randomId));
+                 DatabaseReference  reference = FirebaseDatabase.getInstance().getReference("Users").child(userid);
 
                 Map<String, Object> register_user = new HashMap<>();
-                register_user.put("id", String.valueOf(randomId));
+                //register_user.put("id", String.valueOf(randomId));
+                register_user.put("id", userid);
                 register_user.put("email", email);
                 register_user.put("password", password);
                 register_user.put("name", username);

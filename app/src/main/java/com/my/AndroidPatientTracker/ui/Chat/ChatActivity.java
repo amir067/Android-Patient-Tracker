@@ -8,9 +8,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -18,9 +23,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.my.AndroidPatientTracker.Interface.RecyclerviewOnClickListener;
 import com.my.AndroidPatientTracker.R;
+import com.my.AndroidPatientTracker.models.UserModel;
+import com.my.AndroidPatientTracker.ui.Dashboard.HomeActivity;
 import com.my.AndroidPatientTracker.ui.Rooms.RoomObject;
 import com.my.AndroidPatientTracker.utils.MyUtils;
 
@@ -48,6 +56,11 @@ public class ChatActivity extends AppCompatActivity  implements RecyclerviewOnCl
     RecyclerView chatRV;
 
     EditText messagesTextET;
+    UserModel userModel = new UserModel();
+    TextView lable;
+
+    String senderName="";
+    String senderImage="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +68,7 @@ public class ChatActivity extends AppCompatActivity  implements RecyclerviewOnCl
         setContentView(R.layout.activity_chat);
         sendMessage = findViewById(R.id.sendBtn);
         messagesTextET = findViewById(R.id.et_input_text);
+        lable = findViewById(R.id.textView18);
         chatRV = findViewById(R.id.recyclerView);
         getSupportActionBar().hide();
 
@@ -64,15 +78,18 @@ public class ChatActivity extends AppCompatActivity  implements RecyclerviewOnCl
             userId = getIntent().getStringExtra("id");
             userName = getIntent().getStringExtra("name");
             userImg = getIntent().getStringExtra("img");
+
+            lable.setText("Recommend Medicines to "+userName);
+
             Log.e(TAG, "onCreate: get intent> id received: "+userId );
             Log.e(TAG, "onCreate: get intent> name received: "+userName );
             Log.e(TAG, "onCreate: get intent> img received: "+userImg );
 
         }
 
-         LinearLayoutManager layoutManager = new LinearLayoutManager(ChatActivity.this, LinearLayoutManager.VERTICAL, true);
-        layoutManager.setReverseLayout(true);
-        layoutManager.setStackFromEnd(true);
+         LinearLayoutManager layoutManager = new LinearLayoutManager(ChatActivity.this, LinearLayoutManager.VERTICAL, false);
+        //layoutManager.setReverseLayout(true);
+        //layoutManager.setStackFromEnd(true);
 
         chatListAdapter = new ChatListAdapter(ChatActivity.this, chatList, new RecyclerviewOnClickListener() {
             @Override
@@ -100,6 +117,7 @@ public class ChatActivity extends AppCompatActivity  implements RecyclerviewOnCl
             }
         });
 
+        getUserData();
 
         loadChats(userId);
     }
@@ -113,10 +131,15 @@ public class ChatActivity extends AppCompatActivity  implements RecyclerviewOnCl
         int randomId = new Random().nextInt(400000) + 1000; // [0, 60] + 20 => [20, 80]
 
 
+
         HashMap<Object, Object> PatientMap = new HashMap<>();
         PatientMap.put("message",message);
-        PatientMap.put("senderName",userName);
-        PatientMap.put("senderImage",userImg);
+        PatientMap.put("senderName", senderName);
+
+        if(!senderImage.isEmpty()){
+            PatientMap.put("senderImage",senderImage);
+        }
+
         PatientMap.put("messageTime",System.currentTimeMillis());
 
         rootRef.child(String.valueOf(randomId)).setValue(PatientMap).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -135,7 +158,9 @@ public class ChatActivity extends AppCompatActivity  implements RecyclerviewOnCl
         chatList.clear();
 
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("chat");
-        rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        Query query = rootRef.orderByChild("messageTime");
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.exists()) {
@@ -172,6 +197,61 @@ public class ChatActivity extends AppCompatActivity  implements RecyclerviewOnCl
 
     }
 
+
+    private void getUserData() {
+        Log.e(TAG, "getUserData: gettingg. home fragment.." );
+
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+        if(firebaseUser ==null){
+            Log.e(TAG, "getUserData: firebase user null, try sign in again" );
+
+        }else{
+
+            String userid = firebaseUser.getUid();
+            Log.e(TAG, "userid: "+userid);
+            DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference("Users");
+            rootRef.child(userid).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        Log.e(TAG, "snapshot: exists" );
+
+                        try {
+                            userModel = snapshot.getValue(UserModel.class);
+                            if (!userModel.getName().isEmpty()) {
+                                Log.e(TAG, "onDataChange: get user name received:"+userModel.getName() );
+                                senderName = userModel.getName();
+                            }
+
+                            if(userModel.getProfileImageUrl() !=null){
+                                Log.e(TAG, "onDataChange: get user img received:"+userModel.getProfileImageUrl() );
+                                senderImage = userModel.getProfileImageUrl();
+                            }else{
+                                Log.e(TAG, "onDataChange: get user img null received:");
+
+                            }
+
+                        }
+                        catch (Exception e){
+                            Log.e(TAG, "Exception Error: "+e.getLocalizedMessage() );
+
+                        }
+
+                    } else {
+                        Log.e(TAG, "onDataChange: snapshoot not exists!" );
+
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e(TAG, "onCancelled: "+error.getDetails() );
+                }
+
+            });
+        }
+
+
+    }
 
 
 

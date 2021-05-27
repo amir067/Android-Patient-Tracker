@@ -35,23 +35,28 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="45dp"
+            android:background="@drawable/button_rounded"
             android:orientation="horizontal"
             android:padding="5dp">
 
             <EditText
                 android:id="@+id/et_input_text"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
                 android:layout_weight="1"
-                android:ems="10"
+                android:background="@color/white"
+                android:fontFamily="@font/bariol_regular"
+                android:gravity="center_vertical"
+                android:hint="Enter text to sent.."
                 android:inputType="textPersonName"
-                android:text="Enter text to sent.." />
+                android:textSize="20dp" />
 
             <ImageButton
                 android:id="@+id/sendBtn"
                 android:layout_width="80dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_box_shade_round_gradient_light_blue"
                 app:srcCompat="@drawable/ic_baseline_send_24" />
         </LinearLayout>
 

@@ -50,6 +50,7 @@ import com.my.AndroidPatientTracker.Interface.RecyclerviewOnClickListener;
 import com.my.AndroidPatientTracker.R;
 import com.my.AndroidPatientTracker.adapters.SearchBarAdapterPatient;
 import com.my.AndroidPatientTracker.models.UserModel;
+import com.my.AndroidPatientTracker.ui.Dashboard.HomeActivity;
 import com.my.AndroidPatientTracker.ui.Rooms.RoomObject;
 import com.my.AndroidPatientTracker.utils.MyUtils;
 import com.my.AndroidPatientTracker.utils.Tools;
@@ -90,6 +91,8 @@ public class PatientsFragment extends Fragment implements RecyclerviewOnClickLis
     private MaterialSearchBar searchBar;
     private SearchBarAdapterPatient searchBarAdapterPatient;
 
+    private UserModel userModel = new UserModel();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -111,9 +114,17 @@ public class PatientsFragment extends Fragment implements RecyclerviewOnClickLis
         patientsRV= view.findViewById(R.id.rv_patients);
         addPatientFAB= view.findViewById(R.id.fab_add_patient);
         searchBar = (MaterialSearchBar) view.findViewById(R.id.sb_patients);
+
+        userModel = ((HomeActivity)getActivity() ).userModel;
+        Log.e(TAG, "onViewCreated: model fetch from parent? model id:"+userModel.getId() );
+
+        addPatientFAB.setVisibility(View.GONE);
+
         searchBar.setHint("Search Patients");
         searchBar.setPlaceHolder("Search Patients");
+
         roomsList.add("Select Room");
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, true);
         layoutManager.setReverseLayout(true);
         layoutManager.setStackFromEnd(true);
@@ -149,28 +160,35 @@ public class PatientsFragment extends Fragment implements RecyclerviewOnClickLis
                 Log.e("On item longclick", String.valueOf(position));
                 //Snackbar.make(v, "On item longclick  "+position, Snackbar.LENGTH_LONG).show();
 
+                if(userModel.getUserType() !=null){
+                    if(userModel.getUserType().equals("patient")){
+                        Log.e(TAG, "onItemLongClick: patient are not allowed to remove profile" );
+                    }else{
 
-                final CharSequence[] items = {"Delete", "Cancel"};
-                AlertDialog.Builder builder = new MaterialAlertDialogBuilder(requireContext(),R.style.MyRounded_MaterialComponents_MaterialAlertDialog);//,R.style.MyRounded_MaterialComponents_MaterialAlertDialog
-                builder.setTitle("Select The Action");
-                builder.setCancelable(false);
-                builder.setItems(items, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int item) {
-                        if(item==0){
-                            Log.e("delete clicked", "ok");
-                            doDeletePatient(patientsListAdapter.getItem(position).getId());
-                        }else {
-                            Log.e("cancel clicked", "ok");
-                            dialog.cancel();
-                        }
+                        final CharSequence[] items = {"Delete", "Cancel"};
+                        AlertDialog.Builder builder = new MaterialAlertDialogBuilder(requireContext(),R.style.MyRounded_MaterialComponents_MaterialAlertDialog);//,R.style.MyRounded_MaterialComponents_MaterialAlertDialog
+                        builder.setTitle("Select The Action");
+                        builder.setCancelable(false);
+                        builder.setItems(items, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int item) {
+                                if(item==0){
+                                    Log.e("delete clicked", "ok");
+                                    patientsList.remove(patientsListAdapter.getItem(position));
+
+                                    doDeletePatient(patientsListAdapter.getItem(position).getId());
+
+                                }else {
+                                    Log.e("cancel clicked", "ok");
+                                    dialog.cancel();
+                                }
+                            }
+                        });
+                        builder.show();
                     }
-                });
-                builder.show();
-
+                }
             }
         });
-
 
         addPatientFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -314,6 +332,19 @@ public class PatientsFragment extends Fragment implements RecyclerviewOnClickLis
         loadRoomsList();
     }
 
+    private void doDeleteUser(String id) {
+        if(id !=null) {
+            mAuth = FirebaseAuth.getInstance();
+            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+            Log.e(TAG, "doing ... do deleteFoodItem id: " + (id));
+            mDatabase.child("Users").child(id).removeValue();
+            Toasty.success(requireContext(), "Deleted successfully ", Toast.LENGTH_SHORT).show();
+            //roomsListAdapter.doNotifyDataChanged();
+        }else{
+            Toasty.error(requireContext(),"Error while deleting item!",Toasty.LENGTH_SHORT).show();
+        }
+    }
+
     private void doAddPatient(String pName,String pGender, String pAge,String pRoom,String pRoomNameIndexID) {
         //doAddPatient(pName, pGender,pAge,pRoomName);
 
@@ -385,12 +416,11 @@ public class PatientsFragment extends Fragment implements RecyclerviewOnClickLis
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
         String userid = firebaseUser.getUid();
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-
         Log.e(TAG, "do Delete patient: address: patient."+(id) );
-
-        mDatabase.child("patients").child(id).removeValue();
+        mDatabase.child("Users").child(id).removeValue();
         Toasty.success(requireContext(), "Deleted successfully ", Toast.LENGTH_SHORT).show();
-        //roomsListAdapter.doNotifyDataChanged();
+        patientsListAdapter.notifyDataSetChanged();
+
 
     }
 

@@ -18,8 +18,98 @@
     <string name="roboto_thin">sans-serif-thin</string>
     <string name="roboto_medium">sans-serif-medium</string>
 
-
     <string name="number_picker_formatter">%02d</string>
+
+    <!-- Chat  -->
+    <string name="APPLOZIC_APP_ID">2403033f43d5d373136c54704189d3782</string>
+    <string name="default_media_location_folder">Android-Patient-Tracker</string>
+
+
+
+
+    <string name="mobicomkit_label">Applozic</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Chat using Fragment </string>
+    <string name="title_section3">Messages</string>
+    <string name="title_section4">ECommerce</string>
+    <string name="title_section5">Messages (Activity based)</string>
+    <string name="title_section6">Messages</string>
+    <string name="title_section7">Log out</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Chat</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="button_text">Test</string>
+    <string name="title_activity_test">Test</string>
+    <string name="hello_world">Hello world test!</string>
+    <string name="ecommerce">Applozic</string>
+    <string name="user_id">devashish.mamgain@gmail.com</string>
+    <string name="ecommerce_button1_text">Gadgets</string>
+    <string name="ecommerce_button2_text">Home</string>
+    <string name="ecommerce_button3_text">PC</string>
+    <string name="ecommerce_button4_text">Bags</string>
+    <string name="ecommerce_button5_text">Watches</string>
+    <string name="ecommerce_button6_text">Mobiles</string>
+    <string name="ecommerce_button7_text">Cars</string>
+    <string name="ecommerce_button8_text">Games</string>
+    <string name="ecommerce_button9_text">Music</string>
+    <string name="ecommerce_ad_button">Post Free Ad</string>
+    <string name="ecommerce_chat_button">Chat</string>
+    <string name="ecommerce_ad_text">Free Advertise</string>
+    <string name="ecommerce_text1">Demo screen to show messaging integration, tap on the Chat button below</string>
+
+    <string name="application_key">applozic-sample-app</string>
+    <string name="support_phone_number">+918042028425</string>
+    <string name="default_server_url">https://apps.applozic.com</string>
+    <string name="default_mqtt_server_url">tcp://apps.applozic.com:1883</string>
+    <string name="order_sample_button">Chat with seller</string>
+    <string name="take_order_userid">ApplozicShop</string>
+    <string name="initiate_chat_button_info">Start Chatting</string>
+    <string name="enter_user_id_info">Please Enter UserId</string>
+    <string name="empty_user_id_info">UserId is empty</string>
+
+    <!-- support or admin  contact information ...please add details here  -->
+    <string name="support_contact_display_name">AppLozic</string>
+    <string name="initiate_chat_info">Initiate chat with user</string>
+    <string name="support_contact_userId">applozic</string>
+    <string name="support_contact_emailId">devashish@applozic.com</string>
+    <string name="support_contact_number">918042028425</string>
+    <string name="support_contact_image_url">R.drawable.ic_launcher</string>
+    <string name="invite_message">Hey, check out Applozic -
+        Plug &amp; Play Messaging: http://www.applozic.com</string>
+    <string name="facebook_app_id">2194468880571702</string>
+    <string name="intrest_in_chat">Hello I am interested in your property, Can we chat?</string>
+    <string name="start">START</string>
+    <string name="cancel">Cancel</string>
+    <string name="TestTopic2">TestTopic2</string>
+    <string name="Topic_1">Topic 1</string>
+    <string name="Price">Price</string>
+    <string name="Qty">Qty</string>
+    <string name="rs">20 Rs</string>
+    <string name="group_chat">Group chat</string>
+    <string name="Please_download_the_Google_play_store_apk">Please download the Google play store apk</string>
+    <string name="click_more">Click more</string>
+    <string name="press_back_again_to_exit">Press Back again to Exit.</string>
+    <string name="log_out_successful">Log out successful</string>
+    <!--Rich message strings-->
+    <string name="rich_messages">List of rich messages</string>
+    <string name="rich_messages_title">Rich messages</string>
+    <string name="rich_message_description">Here are the different types of rich messages you can use in Applozic</string>
+    <string name="rich_message_buttons_textView_title">Rich message Buttons</string>
+    <string name="rich_message_image_textView_title">Rich message Image</string>
+    <string name="rich_message_list_textView_title">Rich message List</string>
+    <string name="rich_message_card_title">Rich message Cards</string>
+    <string name="rich_message_generic_card_button_title">Generic Card</string>
+    <string name="rich_message_list_button_title">List</string>
+    <string name="rich_message_card_carousel_button_title">Card Carousel</string>
+    <string name="rich_message_image_button_title">Image</string>
+    <string name="rich_message_submit_button_title">Submit Button</string>
+    <string name="rich_message_suggested_button_title">Suggested Replies</string>
+    <string name="rich_message_link_button_title">Link button</string>
+
+
 
 
     <string name="sign_up">SIGN UP!</string>

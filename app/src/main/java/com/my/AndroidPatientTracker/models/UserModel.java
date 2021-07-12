@@ -26,6 +26,7 @@ public class UserModel implements Serializable {
     //For All users
     private boolean userApproved;
     private boolean isAdmin;
+    private boolean registeredForChat;
 
     public long updated_at,created_at;
 
@@ -196,5 +197,13 @@ public class UserModel implements Serializable {
 
     public void setRoomName(String roomName) {
         RoomName = roomName;
+    }
+
+    public boolean isRegisteredForChat() {
+        return registeredForChat;
+    }
+
+    public void setRegisteredForChat(boolean registeredForChat) {
+        this.registeredForChat = registeredForChat;
     }
 }

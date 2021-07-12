@@ -1,16 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.my.AndroidPatientTracker">
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
-
     <uses-feature android:name="android.hardware.camera.front" />
-
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.CAMERA" /> <!-- Allows applications to open network sockets. -->
     <uses-permission android:name="android.permission.INTERNET" /> <!-- Allows applications to access information about networks. -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- Required to show current location -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.my.AndroidPatientTracker.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.my.AndroidPatientTracker.permission.MAPS_RECEIVE" />
+    <permission android:name="com.my.AndroidPatientTracker.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+    <permission android:name="com.my.AndroidPatientTracker.permission.MAPS_RECEIVE" android:protectionLevel="signature" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"  />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Required to show current location -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- Required OpenGL ES 2.0. for Maps V2 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- Required to show current location -->
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
@@ -24,12 +53,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.Chat.ChatActivity"></activity>
 
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAgsrGTRfHzUi_MKdzAWgHvG6k1BsFz2JA" />
+        <activity android:name=".ui.Chat.ChatActivity"/>
 
         <activity
             android:name=".ui.Activities.SplashActivity"
@@ -40,30 +67,96 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ui.Activities.WalkThrowActivity"
             android:theme="@style/LoginActivityTheme" />
+
         <activity
             android:name=".ui.Authentication.LoginActivity"
             android:theme="@style/LoginActivityTheme" />
+
         <activity
             android:name=".ui.Dashboard.HomeActivity"
-            android:theme="@style/AppTheme"></activity>
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/AppTheme">
+        </activity>
+
         <activity
             android:name=".ui.Authentication.RegisterActivity"
             android:theme="@style/LoginActivityTheme" />
+
         <activity
             android:name=".ui.Authentication.ResetPsd"
             android:theme="@style/LoginActivityTheme" />
+
         <activity android:name=".ui.Activities.InfoActivity" />
+
         <activity
             android:name=".ui.Activities.ProfileActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
         <activity android:name=".ui.Authentication.NotApprovedPageActivity" />
+
         <activity
             android:name=".ui.Activities.AdminActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
         <activity android:name=".ui.Patients.PatientDetailActivity" />
+
+        <meta-data android:name="com.applozic.application.key"
+            android:value="@string/APPLOZIC_APP_ID" />
+
+        <meta-data
+            android:name="main_folder_name"
+            android:value="@string/default_media_location_folder"
+            tools:node="replace" />
+
+        <meta-data android:name="com.applozic.mobicomkit.notification.smallIcon"
+            android:resource="@drawable/icon_main_transparent" /> <!-- Replace this with a valid resource name for Launcher white Icon -->
+
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />  <!--Replace with your geo api key from google developer console  -->
+        <!-- For testing purpose use AIzaSyAYB1vPc4cpn_FJv68eS_ZGe1UasBNwxLI
+        To disable the location sharing via map add this line ApplozicSetting.getInstance(context).disableLocationSharingViaMap(); in onSuccess of Applozic UserLoginTask -->
+
+        <meta-data android:name="activity.open.on.notification"
+            tools:node="replace"
+            android:value="com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity" /> <!-- NOTE : Do NOT change this value -->
+
+        <meta-data android:name="com.package.name"
+            android:value="${applicationId}" /> <!-- NOTE: Do NOT change this, it should remain same i.e 'com.package.name' -->
+
+        <meta-data
+            android:name="com.giphy.api.key"
+            android:value="" />
+
+        <activity android:name="com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity"
+            android:configChanges="keyboardHidden|screenSize|smallestScreenSize|screenLayout|orientation"
+            android:label="@string/app_name"
+            android:parentActivityName=".ui.Dashboard.HomeActivity"
+            android:theme="@style/ApplozicTheme"
+            android:launchMode="singleTask"
+            tools:node="replace">
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.Dashboard.HomeActivity" />
+        </activity>
+
+        <service
+            android:name=".pushnotification.FcmListenerService"
+            android:exported="true"
+            android:stopWithTask="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+
+
     </application>
 
 </manifest>

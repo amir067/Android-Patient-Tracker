@@ -27,6 +27,9 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 
+import com.applozic.mobicomkit.Applozic;
+import com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService;
+import com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -73,49 +76,19 @@ public class PatientDetailActivity extends AppCompatActivity implements Recycler
     private NavController navController;
     private DatabaseReference rootRef;
 
-
-    private UserModel mechinicObject =new UserModel();
-
-    // latitude and longitude
-    double latitude = 0;
-    double longitude = 0;
+    private UserModel userModel =new UserModel();
 
     // The map object for reference for ease of adding points and such
     private GoogleMap mGoogleMap;
     private MapView mMapView ;
-
-    CameraPosition cameraPosition = new CameraPosition.Builder()
-            .target(new LatLng(latitude, longitude))
-            .zoom(10)
-            .bearing(0)
-            .tilt(80)
-            .build();
-    // The camera position tells us where the view is on the map
-    private CameraPosition mCameraPosition = cameraPosition;
-    // Current latitude and longitude of user
-    private LatLng mCurrentLatLong = new LatLng(latitude, longitude);
-    // These are flags that allow us to selectively not move the camera and
-    // instead wait for idle so the movement isn't jerky
-    private boolean mCameraMoving = false;
-    private boolean mPendingUpdate = false;
 
     //UI Layouts Containers
     private LinearLayout hotelLayoutBox;
     private LinearLayout eventLayoutBox;
     private CardView mapViewCard;
 
-
-
-
-    //Sub Images
-    //PlaceDetailImagesAdapter subImagesAdapter;
-   // private RecyclerView imagesRecyclerView;
-   // ArrayList<String> imageUriArrayList = new ArrayList<>();
-
-
     private FloatingActionButton addSubImagesButton;
     private  boolean isAdminUser=false;
-
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private StorageReference mStorageref;
@@ -123,7 +96,6 @@ public class PatientDetailActivity extends AppCompatActivity implements Recycler
     private Uri imageuri;
 
     private Uri filePath;
-
 
     private ImageButton backButton;
     private Button bookNow;
@@ -174,35 +146,54 @@ public class PatientDetailActivity extends AppCompatActivity implements Recycler
         //assert getArguments() != null;
         if(getIntent() !=null){
 
-            mechinicObject.setId(getIntent().getStringExtra("id"));
-            mechinicObject.setName(getIntent().getStringExtra("name"));
-            mechinicObject.setAddress(getIntent().getStringExtra("address"));
-            mechinicObject.setPhone(getIntent().getStringExtra("phone"));
-            mechinicObject.setProfileImageUrl(getIntent().getStringExtra("img"));
-            mechinicObject.setUserBio(getIntent().getStringExtra("desc"));
+            userModel.setId(getIntent().getStringExtra("id"));
+            userModel.setName(getIntent().getStringExtra("name"));
+            userModel.setAddress(getIntent().getStringExtra("address"));
+            userModel.setPhone(getIntent().getStringExtra("phone"));
+            userModel.setProfileImageUrl(getIntent().getStringExtra("img"));
+            userModel.setUserBio(getIntent().getStringExtra("desc"));
            // mechinicObject.setLatMAP(getIntent().getDoubleExtra("lat",0));
            // mechinicObject.setLongMAP(getIntent().getDoubleExtra("long",0));
 
             Log.e(TAG, "onCreate: getIntent: Data receved: " );
-            Log.e(TAG, "id: " +mechinicObject.getId());
-            Log.e(TAG, "name: "+mechinicObject.getName() );
-            Log.e(TAG, "address: "+ mechinicObject.getAddress());
-            Log.e(TAG, "phone: " +mechinicObject.getPhone());
+            Log.e(TAG, "id: " +userModel.getId());
+            Log.e(TAG, "name: "+userModel.getName() );
+            Log.e(TAG, "address: "+ userModel.getAddress());
+            Log.e(TAG, "phone: " +userModel.getPhone());
            // Log.e(TAG, "desc: " +mechinicObject.getDescription());
-            Log.e(TAG, "img: " +mechinicObject.getProfileImageUrl());
+            Log.e(TAG, "img: " +userModel.getProfileImageUrl());
            // Log.e(TAG, "lat: " +mechinicObject.getLatMAP());
           //  Log.e(TAG, "long: "+ mechinicObject.getLongMAP());
+
+            userModel =(UserModel) getIntent().getSerializableExtra("item");
+            Log.e(TAG, "onCreate: get intent parceable test?: "+userModel.getId() );
 
 
             bookNow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    Intent intent = new Intent(PatientDetailActivity.this, ChatActivity.class);
-                    intent.putExtra("id",(mechinicObject.getId()));
-                    intent.putExtra("name",(mechinicObject.getName()));
-                    intent.putExtra("img",(mechinicObject.getProfileImageUrl()));
-                    startActivity(intent);
+                    if(Applozic.isConnected(PatientDetailActivity.this)){
+                        //do something
+                        Log.e(TAG, "Applozic.isConnected " );
+
+                        if(userModel.isRegisteredForChat()){
+                            Intent intent = new Intent(PatientDetailActivity.this, ConversationActivity.class);
+                            intent.putExtra(ConversationUIService.USER_ID, userModel.getId());
+                            intent.putExtra(ConversationUIService.DISPLAY_NAME,  userModel.getName()); //put it for displaying the title.
+                            intent.putExtra(ConversationUIService.TAKE_ORDER,true); //Skip chat list for showing on back press
+                            startActivity(intent);
+                        }else{
+                            Toasty.warning(PatientDetailActivity.this,"This user is not registed for chat or its profile is not approved yet!",Toasty.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+                   /* Intent intent = new Intent(PatientDetailActivity.this, ChatActivity.class);
+                    intent.putExtra("id",(userModel.getId()));
+                    intent.putExtra("name",(userModel.getName()));
+                    intent.putExtra("img",(userModel.getProfileImageUrl()));
+                    startActivity(intent);*/
 
                 }
             });
@@ -210,30 +201,30 @@ public class PatientDetailActivity extends AppCompatActivity implements Recycler
 
             //mapViewCard.setVisibility(View.VISIBLE);
 
-            if(mechinicObject.getName()!=null){
-                placeName.setText(mechinicObject.getName());
+            if(userModel.getName()!=null){
+                placeName.setText(userModel.getName());
             }else{
                 placeName.setVisibility(View.GONE);
             }
 
-            if(mechinicObject.getAddress() !=null){
-                placeCityTV.setText(mechinicObject.getAddress());
+            if(userModel.getAddress() !=null){
+                placeCityTV.setText(userModel.getAddress());
             }else{
                 placeCityTV.setVisibility(View.GONE);
             }
 
-            if(mechinicObject.getUserBio()!=null){
-                placeDetail.setText(mechinicObject.getUserBio());
+            if(userModel.getUserBio()!=null){
+                placeDetail.setText(userModel.getUserBio());
             }else{
                 placeDetail.setVisibility(View.GONE);
             }
 
-            if(mechinicObject.getProfileImageUrl()!=null){
+            if(userModel.getProfileImageUrl()!=null){
 
                 //Picasso.get().load(placeData.getImageURL()).into(placeImage);
 
                 Glide.with(PatientDetailActivity.this)
-                        .load(mechinicObject.getProfileUrl())
+                        .load(userModel.getProfileUrl())
                         .centerCrop()
                         .placeholder(R.drawable.bg_loading_image_placeholder)
                         .diskCacheStrategy(DiskCacheStrategy.DATA)
@@ -330,11 +321,11 @@ public class PatientDetailActivity extends AppCompatActivity implements Recycler
         progressDialog.show();
         int randomPIN = (int)(Math.random()*9000)+1000;
 
-        DatabaseReference placeImagesRef = FirebaseDatabase.getInstance().getReference("place").child(mechinicObject.getId()).child("placeImages");
+        DatabaseReference placeImagesRef = FirebaseDatabase.getInstance().getReference("place").child(userModel.getId()).child("placeImages");
 
         if (imageuri !=null){
            // StorageReference  filereference  = mStorageref.child(System.currentTimeMillis()+ "."+getFileExtension(imageuri));
-            StorageReference  filereference  = mStorageref.child(mechinicObject.getId()+"/"+mechinicObject.getId()+"-"+randomPIN+ "."+getFileExtension(imageuri));
+            StorageReference  filereference  = mStorageref.child(userModel.getId()+"/"+userModel.getId()+"-"+randomPIN+ "."+getFileExtension(imageuri));
 
             filereference.putFile(imageuri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -352,7 +343,7 @@ public class PatientDetailActivity extends AppCompatActivity implements Recycler
                                 progressDialog.show();
 
                                 //String  uploadId = mDatabaseref.push().getKey();
-                                placeImagesRef.child(mechinicObject.getId()+"-"+randomPIN).setValue(downloadUrl.toString());
+                                placeImagesRef.child(userModel.getId()+"-"+randomPIN).setValue(downloadUrl.toString());
                                 progressDialog.setCanceledOnTouchOutside(false);
                                 progressDialog.dismiss();
 

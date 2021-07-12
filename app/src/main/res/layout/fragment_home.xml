@@ -88,6 +88,27 @@
                                         app:rippleColor="@color/purple_A400" />
 
                                     <com.google.android.material.button.MaterialButton
+                                        android:id="@+id/btn_all_chats"
+                                        android:layout_width="100dp"
+                                        android:layout_height="80dp"
+                                        android:layout_marginStart="15dp"
+                                        android:layout_marginLeft="0dp"
+                                        android:layout_marginTop="5dp"
+                                        android:layout_marginEnd="5dp"
+                                        android:layout_marginRight="5dp"
+                                        android:layout_marginBottom="5dp"
+                                        android:clickable="true"
+                                        android:text="Chats"
+                                        android:textAllCaps="false"
+                                        android:textSize="13dp"
+                                        app:backgroundTint="#4CAF50"
+                                        app:cornerRadius="20dp"
+                                        app:icon="@drawable/ic_baseline_chat_24"
+                                        app:iconGravity="textTop"
+                                        app:iconSize="25dp"
+                                        app:rippleColor="@color/purple_A400" />
+
+                                    <com.google.android.material.button.MaterialButton
                                         android:id="@+id/btn_bar_btn1"
                                         android:layout_width="100dp"
                                         android:layout_height="80dp"
@@ -229,6 +250,7 @@
 
                                 <TextView
 
+                                    android:id="@+id/lable_patients"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"

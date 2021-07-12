@@ -3,6 +3,7 @@ package com.my.AndroidPatientTracker.ui.Profile;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -31,6 +32,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.applozic.mobicomkit.Applozic;
+import com.applozic.mobicomkit.listners.AlLogoutHandler;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
@@ -50,6 +53,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.my.AndroidPatientTracker.R;
 import com.my.AndroidPatientTracker.models.UserModel;
+import com.my.AndroidPatientTracker.ui.Dashboard.HomeActivity;
 import com.my.AndroidPatientTracker.utils.MyUtils;
 import com.my.AndroidPatientTracker.utils.PreferenceHelperDemo;
 
@@ -62,6 +66,7 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import es.dmoral.toasty.Toasty;
 
 
 public class ProfileFragment2 extends Fragment {
@@ -172,6 +177,8 @@ public class ProfileFragment2 extends Fragment {
 
         getUserData();
     }
+
+
 
     private void getUserData() {
 
@@ -318,7 +325,23 @@ public class ProfileFragment2 extends Fragment {
 
     public void logout(){
         FirebaseAuth.getInstance().signOut();
+        doLogoutOnApplozic();
         navController.navigate(R.id.LoginActivity);
+    }
+    private void doLogoutOnApplozic() {
+
+        Applozic.logoutUser(requireContext(), new AlLogoutHandler() {
+            @Override
+            public void onSuccess(Context context) {
+                Log.e(TAG, "onSuccess: doLogoutOnApplozic" );
+            }
+
+            @Override
+            public void onFailure(Exception exception) {
+                Log.e(TAG, "onFailure: doLogoutOnApplozic" );
+
+            }
+        });
 
     }
 

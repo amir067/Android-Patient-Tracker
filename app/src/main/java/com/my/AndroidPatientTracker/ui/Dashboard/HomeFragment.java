@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -61,9 +62,16 @@ import com.my.AndroidPatientTracker.utils.Tools;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import es.dmoral.toasty.Toasty;
 
 public class HomeFragment extends Fragment implements RecyclerviewOnClickListener {
+
+    public enum USER_LIST_TYPE{
+        DOCTOR,
+        PATIENT
+    }
 
     private static final String TAG = "HomeFragment";
     private int backPressed = 0;
@@ -89,6 +97,7 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
     private Button barButton1,barButton2,barButton3,barButton4,barButton5;
     private BottomNavigationView bottomNavigationView;
     private Button adminPanel;
+    private Button chatsButton;
 
     private FrameLayout mainDataFrameLayout;
     private ImageView noInternetIV;
@@ -114,16 +123,21 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
 
     RecyclerviewOnClickListener recyclerviewOnClickListener ;
 
+    private UserModel userModel  = new UserModel();
 
+    @BindView(R.id.lable_patients)
+    TextView lable_patients;
+
+    USER_LIST_TYPE userListType = USER_LIST_TYPE.DOCTOR;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         Tools.setSystemBarTransparent(requireActivity());
+        ButterKnife.bind(this,root);
         bottomNavigationView = ((HomeActivity) getActivity()).findViewById(R.id.bottom_nav_view);
-        bottomNavigationView.setVisibility(View.VISIBLE);
-
+        //bottomNavigationView.setVisibility(View.VISIBLE);
 
         searchBarAdapterPatient = new SearchBarAdapterPatient(inflater,this);
         // Inflate the layout for this fragment
@@ -149,14 +163,14 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
         adminPanel = view.findViewById(R.id.adminPanel);
 
         searchBar = (MaterialSearchBar) view.findViewById(R.id.sb_places);
-        searchBar.setHint("Search Patients");
-        searchBar.setPlaceHolder("Search Patients");
+
         //searchBar.setSpeechMode(true);
 
         roomsRV= view.findViewById(R.id.rv_rooms);
         patientsRV= view.findViewById(R.id.rv_patients);
         progressbar= view.findViewById(R.id.pb_home_frag);
 
+        chatsButton = view.findViewById(R.id.btn_all_chats);
         barButton1 = view.findViewById(R.id.btn_bar_btn1);
         barButton2 = view.findViewById(R.id.btn_bar_btn2);
         barButton3 = view.findViewById(R.id.btn_bar_btn3);
@@ -180,6 +194,14 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(requireContext(), AdminActivity.class));
+            }
+        });
+
+        chatsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(requireContext(), ConversationActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -297,6 +319,8 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
                 intent.putExtra("img",patientsList.get(position).getProfileImageUrl() );
                // intent.putExtra("lat",patientsList.get(position).getLatMAP() );
                 //intent.putExtra("long",patientsList.get(position).getLongMAP() );
+
+                intent.putExtra("item",( patientsList.get(position)) );
                 startActivity(intent);
 
 
@@ -328,7 +352,7 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
 
 
         loadRoomsList();
-        loadPatientsList();
+
         getUserData();
 
         if(navController!=null){
@@ -336,9 +360,7 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
             //navController.popBackStack();
         }
 
-
     }
-
 
     private void loadRoomsList() {
         // loading_dialog.show();
@@ -394,7 +416,7 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
         });
     }
 
-    private void loadPatientsList() {
+    private void loadList(USER_LIST_TYPE user_list_type) {
         // loading_dialog.show();
 
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference("Users");
@@ -419,20 +441,33 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
 
                         if(data.child("userType").exists()){
 
-                            if(data.child("userType").getValue().equals("patient")){
-                                UserModel temObject = data.getValue(UserModel.class);
-                                patientsList.add(temObject);
+                            if(user_list_type == USER_LIST_TYPE.DOCTOR){
+                                if(data.child("userType").getValue().equals("doctor")){
+                                    UserModel temObject = data.getValue(UserModel.class);
+                                    patientsList.add(temObject);
+                                }
+                            }
+                            else if(user_list_type == USER_LIST_TYPE.PATIENT){
+
+                                if(data.child("userType").getValue().equals("patient")){
+                                    UserModel temObject = data.getValue(UserModel.class);
+                                    patientsList.add(temObject);
+                                }
+                            }else{
+                                Log.e(TAG, "during userers loop user type not found skiping this item " );
                             }
 
                         }
 
                     }
 
-
-
                     patientsListAdapter.setPlaceObjects(patientsList);
                     searchBarAdapterPatient.setSuggestions(patientsList);
                     searchBar.setCustomSuggestionAdapter(searchBarAdapterPatient);
+
+                    updateSerachBarUI(user_list_type);
+
+
                     //placesSuggestionsAdapter.setSuggestions(placeList);
                     //searchBar.setCustomSuggestionAdapter(placesSuggestionsAdapter);
 
@@ -455,6 +490,18 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
 
         });
 
+    }
+
+    private void updateSerachBarUI(USER_LIST_TYPE user_list_type) {
+        Log.e(TAG, "updateSerachBarUI: called" );
+
+        if(user_list_type== USER_LIST_TYPE.DOCTOR){
+            searchBar.setHint("Search Doctors");
+            searchBar.setPlaceHolder("Search Doctors");
+        }else{
+            searchBar.setHint("Search Patients");
+            searchBar.setPlaceHolder("Search Patients");
+        }
     }
 
     private void navigate(int destination) {
@@ -535,11 +582,6 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
     private void getUserData() {
         Log.e(TAG, "getUserData: gettingg. home fragment.." );
 
-        //loadingAnimationViewDots.setVisibility(View.VISIBLE);
-        //loading_dialog.show();
-        //progressBar.setVisibility(View.VISIBLE);
-
-
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
 
         if(firebaseUser ==null){
@@ -558,7 +600,7 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
 
                         try {
 
-                            UserModel userModel = snapshot.getValue(UserModel.class);
+                            userModel = snapshot.getValue(UserModel.class);
 
                             if (!userModel.getName().isEmpty()) {
 
@@ -571,6 +613,8 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
                             }else{
                                 user_address.setVisibility(View.GONE);
                             }
+
+                            updateUIaccordingToUser(userModel);
 
                             Log.e(TAG, "parsing-isAdmin: " + userModel.isAdmin());
 
@@ -650,6 +694,28 @@ public class HomeFragment extends Fragment implements RecyclerviewOnClickListene
             });
         }
 
+
+    }
+
+    private void updateUIaccordingToUser(UserModel userModel) {
+        Log.e(TAG, "updateUIaccordingToUser: " );
+        if(userModel.getUserType() !=null){
+
+            Log.e(TAG, "updateUIaccordingToUser: user type is not null" );
+
+            if(userModel.getUserType().equals("patient")){
+                Log.e(TAG, "user is:  patient" );
+                lable_patients.setText("Doctors");
+                loadList(USER_LIST_TYPE.DOCTOR);
+            }else{
+                Log.e(TAG, "user is:  doctor" );
+                loadList(USER_LIST_TYPE.PATIENT);
+                Log.e(TAG, " leave old ui " );
+            }
+
+        }else{
+            Log.e(TAG, "updateUIaccordingToUser: user type is null" );
+        }
 
     }
 

@@ -27,6 +27,7 @@ tools:context=".ui.Patients.PatientsFragment">
     </LinearLayout>
 
     <TextView
+        android:id="@+id/lableHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"

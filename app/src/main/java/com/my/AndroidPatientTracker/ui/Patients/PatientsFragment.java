@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -51,6 +52,7 @@ import com.my.AndroidPatientTracker.R;
 import com.my.AndroidPatientTracker.adapters.SearchBarAdapterPatient;
 import com.my.AndroidPatientTracker.models.UserModel;
 import com.my.AndroidPatientTracker.ui.Dashboard.HomeActivity;
+import com.my.AndroidPatientTracker.ui.Dashboard.HomeFragment;
 import com.my.AndroidPatientTracker.ui.Rooms.RoomObject;
 import com.my.AndroidPatientTracker.utils.MyUtils;
 import com.my.AndroidPatientTracker.utils.Tools;
@@ -64,6 +66,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import es.dmoral.toasty.Toasty;
 
 public class PatientsFragment extends Fragment implements RecyclerviewOnClickListener {
@@ -93,12 +97,16 @@ public class PatientsFragment extends Fragment implements RecyclerviewOnClickLis
 
     private UserModel userModel = new UserModel();
 
+    @BindView(R.id.lableHeader)
+    TextView lableHeader;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_patients, container, false);
         getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         Tools.setSystemBarTransparent(requireActivity());
+        ButterKnife.bind(this,root);
         getActivity().setTheme(R.style.BasicAppTheme);
         searchBarAdapterPatient = new SearchBarAdapterPatient(inflater,this);
 
@@ -118,10 +126,22 @@ public class PatientsFragment extends Fragment implements RecyclerviewOnClickLis
         userModel = ((HomeActivity)getActivity() ).userModel;
         Log.e(TAG, "onViewCreated: model fetch from parent? model id:"+userModel.getId() );
 
+        if(userModel.getUserType() !=null){
+
+            if(userModel.getUserType().equals("patient")){
+                loadPatientsList(HomeFragment.USER_LIST_TYPE.DOCTOR);
+            }else if(userModel.getUserType().equals("doctor")){
+                loadPatientsList(HomeFragment.USER_LIST_TYPE.PATIENT);
+            }else{
+                loadPatientsList(HomeFragment.USER_LIST_TYPE.PATIENT);
+            }
+
+        }
+
         addPatientFAB.setVisibility(View.GONE);
 
-        searchBar.setHint("Search Patients");
-        searchBar.setPlaceHolder("Search Patients");
+       /* searchBar.setHint("Search Patients");
+        searchBar.setPlaceHolder("Search Patients");*/
 
         roomsList.add("Select Room");
 
@@ -149,6 +169,7 @@ public class PatientsFragment extends Fragment implements RecyclerviewOnClickLis
                 intent.putExtra("img",patientsList.get(position).getProfileImageUrl() );
                 // intent.putExtra("lat",patientsList.get(position).getLatMAP() );
                 //intent.putExtra("long",patientsList.get(position).getLongMAP() );
+                intent.putExtra("item",( patientsList.get(position)) );
                 startActivity(intent);
 
 
@@ -163,6 +184,8 @@ public class PatientsFragment extends Fragment implements RecyclerviewOnClickLis
                 if(userModel.getUserType() !=null){
                     if(userModel.getUserType().equals("patient")){
                         Log.e(TAG, "onItemLongClick: patient are not allowed to remove profile" );
+
+
                     }else{
 
                         final CharSequence[] items = {"Delete", "Cancel"};
@@ -328,8 +351,23 @@ public class PatientsFragment extends Fragment implements RecyclerviewOnClickLis
         patientsRV.setAdapter(patientsListAdapter);
 
 
-        loadPatientsList();
+        //loadPatientsList();
         loadRoomsList();
+    }
+
+
+    private void updateSerachBarUI(HomeFragment.USER_LIST_TYPE user_list_type) {
+        Log.e(TAG, "updateSerachBarUI: called" );
+
+        if(user_list_type== HomeFragment.USER_LIST_TYPE.DOCTOR){
+            searchBar.setHint("Search Doctors");
+            searchBar.setPlaceHolder("Search Doctors");
+            lableHeader.setText("All Doctors");
+        }else{
+            searchBar.setHint("Search Patients");
+            searchBar.setPlaceHolder("Search Patients");
+            lableHeader.setText("All Patients");
+        }
     }
 
     private void doDeleteUser(String id) {
@@ -506,7 +544,7 @@ public class PatientsFragment extends Fragment implements RecyclerviewOnClickLis
     }
 
 
-    private void loadPatientsList() {
+    private void loadPatientsList(HomeFragment.USER_LIST_TYPE user_list_type) {
         // loading_dialog.show();
 
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference("Users");
@@ -524,9 +562,19 @@ public class PatientsFragment extends Fragment implements RecyclerviewOnClickLis
 
                         if(data.child("userType").exists()){
 
-                            if(data.child("userType").getValue().equals("patient")){
-                                UserModel temObject = data.getValue(UserModel.class);
-                                patientsList.add(temObject);
+                            if(user_list_type == HomeFragment.USER_LIST_TYPE.DOCTOR){
+                                if(data.child("userType").getValue().equals("doctor")){
+                                    UserModel temObject = data.getValue(UserModel.class);
+                                    patientsList.add(temObject);
+                                }
+                            }
+                            else if(user_list_type == HomeFragment.USER_LIST_TYPE.PATIENT){
+                                if(data.child("userType").getValue().equals("patient")){
+                                    UserModel temObject = data.getValue(UserModel.class);
+                                    patientsList.add(temObject);
+                                }
+                            }else{
+                                Log.e(TAG, "during userers loop user type not found skiping this item " );
                             }
 
                         }
@@ -543,6 +591,8 @@ public class PatientsFragment extends Fragment implements RecyclerviewOnClickLis
                     //  Toast.makeText(requireContext(), " load data success", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "patients value : "+snapshot.getValue());
                     Log.e(TAG, "load data success: patients List " );
+
+                    updateSerachBarUI(user_list_type);
 
 
                 } else {
